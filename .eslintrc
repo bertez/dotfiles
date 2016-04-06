@@ -19,7 +19,8 @@
             2,
             "always"
         ],
-        "no-unused-vars": [2, {"vars": "all", "args": "none"}]
+        "no-unused-vars": [2, {"vars": "all", "args": "none"}],
+        "no-console": [2, { allow: ["warn", "error"] }]
     },
     "env": {
         "es6": true,
@@ -28,6 +29,10 @@
         "browser": true,
         "jquery": true,
         "mocha": true
+    },
+    "globals": {
+        "DEVELOPMENT": true,
+        "PRODUCTION": true
     },
     "extends": "eslint:recommended",
     "ecmaFeatures": {

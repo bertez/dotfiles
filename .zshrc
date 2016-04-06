@@ -83,7 +83,7 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
-export LC_ALL=en_US.UTF-8  
+export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 export PYTHONSTARTUP=~/.pythonrc
@@ -145,28 +145,39 @@ alias redis='redis-server /usr/local/etc/redis.conf'
 
 source ~/.iterm2_shell_integration.`basename $SHELL`
 
-brew-cask-upgrade() { 
-  if [ "$1" != '--continue' ]; then 
-    echo "Removing brew cache" 
-    rm -rf "$(brew --cache)" 
-    echo "Running brew update" 
-    brew update 
-  fi 
-  for c in $(brew cask list); do 
-    echo -e "\n\nInstalled versions of $c: " 
-    ls /opt/homebrew-cask/Caskroom/$c 
-    echo "Cask info for $c" 
-    brew cask info $c 
-    select ynx in "Yes" "No" "Exit"; do  
-      case $ynx in 
-        "Yes") echo "Uninstalling $c"; brew cask uninstall --force "$c"; echo "Re-installing $c"; brew cask install "$c"; break;; 
-        "No") echo "Skipping $c"; break;; 
-        "Exit") echo "Exiting brew-cask-upgrade"; return;; 
-      esac 
-    done 
-  done 
-} 
+brew-cask-upgrade() {
+  if [ "$1" != '--continue' ]; then
+    echo "Removing brew cache"
+    rm -rf "$(brew --cache)"
+    echo "Running brew update"
+    brew update
+  fi
+  for c in $(brew cask list); do
+    echo -e "\n\nInstalled versions of $c: "
+    ls /opt/homebrew-cask/Caskroom/$c
+    echo "Cask info for $c"
+    brew cask info $c
+    select ynx in "Yes" "No" "Exit"; do
+      case $ynx in
+        "Yes") echo "Uninstalling $c"; brew cask uninstall --force "$c"; echo "Re-installing $c"; brew cask install "$c"; break;;
+        "No") echo "Skipping $c"; break;;
+        "Exit") echo "Exiting brew-cask-upgrade"; return;;
+      esac
+    done
+  done
+}
 
 export HISTSIZE=20000
 
 alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+transfer() { if [ $# -eq 0 ]; then echo "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"; return 1; fi
+tmpfile=$( mktemp -t transferXXX ); if tty -s; then basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g'); curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile; else curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ; fi; cat $tmpfile; rm -f $tmpfile; }
+
+#gpg-agent
+if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
+    source ~/.gnupg/.gpg-agent-info
+    export GPG_AGENT_INFO
+else
+    eval $(gpg-agent --daemon)
+fi
