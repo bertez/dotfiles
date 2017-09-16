@@ -1,62 +1,37 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["babel", "react"],
-    "rules": {
-        "strict": [0, "global"],
-        "indent": [
-            2,
-            4
-        ],
-        "quotes": [
-            2,
-            "single"
-        ],
-        "linebreak-style": [
-            2,
-            "unix"
-        ],
-        "semi": [
-            2,
-            "always"
-        ],
-        "no-unused-vars": [2, {"vars": "all", "args": "none"}],
-        "no-console": [2, { allow: ["warn", "error"] }]
-    },
-    "env": {
-        "es6": true,
-        "node": true,
-        "amd": true,
-        "browser": true,
-        "jquery": true,
-        "mocha": true
-    },
-    "globals": {
-        "DEVELOPMENT": true,
-        "PRODUCTION": true
-    },
-    "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2016,
     "ecmaFeatures": {
-        "arrowFunctions": true,
-        "binaryLiterals": true,
-        "blockBindings": true,
-        "classes": true,
-        "defaultParams": true,
-        "destructuring": true,
-        "forOf": true,
-        "generators": true,
-        "modules": true,
-        "objectLiteralComputedProperties": true,
-        "objectLiteralDuplicateProperties": true,
-        "objectLiteralShorthandMethods": true,
-        "objectLiteralShorthandProperties": true,
-        "octalLiterals": true,
-        "regexUFlag": true,
-        "regexYFlag": true,
-        "spread": true,
-        "superInFunctions": true,
-        "templateStrings": true,
-        "unicodeCodePointEscapes": true,
-        "globalReturn": true,
-        "jsx": true
+      "jsx": true,
+      "modules": true
     }
+  },
+  "plugins": ["react"],
+  "rules": {
+    "react/prop-types": 0,
+    "quotes": [1, "single"],
+    "linebreak-style": [2, "unix"],
+    "semi": [1, "always"],
+    "no-unused-vars": [1, { "vars": "all", "args": "none" }],
+    "no-console": [1, { "allow": ["warn", "error"] }]
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "amd": true,
+    "browser": true,
+    "jquery": true,
+    "mocha": true
+  },
+  "globals": {
+    "DEVELOPMENT": true,
+    "PRODUCTION": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
+  ]
 }
