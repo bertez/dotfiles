@@ -1,0 +1,487 @@
+(setq user-full-name "Berto Yáñez"
+      user-mail-address "berto@ber.to")
+
+;; save the position of the cursor
+(save-place-mode 1)
+
+;; remove splash screen and set default mode
+(setq inhibit-splash-screen t
+      initial-scratch-message nil
+      initial-major-mode 'org-mode)
+
+;; UTF-8
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+;; Remove menu bar and toolbar in GUI mode
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+;; select like other editors
+(delete-selection-mode t)
+(transient-mark-mode t)
+
+;; use system clipboard
+(setq select-enable-clipboard t)
+
+;; show empty lines at the end
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+
+;; tabs as 4 spaces
+(setq-default indent-tabs-mode nil)
+(setq tab-width 2)
+(setq-default sgml-basic-offset 2)
+
+;; Place all the backups in one directory
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(setq delete-old-versions -1)
+(setq version-control t)
+(setq vc-make-backup-files t)
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+
+;; history
+(setq savehist-file "~/.emacs.d/savehist")
+(savehist-mode 1)
+(setq history-length t)
+(setq history-delete-duplicates t)
+(setq savehist-save-minibuffer-history 1)
+(setq savehist-additional-variables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+
+;; Fastest input
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Disable bell
+(setq ring-bell-function 'ignore)
+
+;; echo keybindings faster
+(setq echo-keystrokes 0.1
+      use-dialog-box nil)
+
+;; highlight parentheses
+(show-paren-mode t)
+
+;; line spacing
+(setq-default line-spacing 0)
+
+;; line spacing
+(setq-default line-spacing 0)
+
+;; use ibuffer C-x C-b
+(defalias 'list-buffers 'ibuffer)
+
+;; default TRAMP
+(setq tramp-default-method "ssh")
+
+;; Remove spaces and tabs on sabe
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook 'untabify)
+
+;;
+;; GLOBAL KEYBINDINGS
+;;
+
+(global-set-key (kbd "C-:") 'comment-or-uncomment-region)
+(global-set-key (kbd "RET") 'newline-and-indent)
+(global-unset-key "\C-z")
+(global-unset-key "\C-x\C-z")
+
+
+;;
+;; PACKAGE STUFF
+;;
+
+;; Init package stuff
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;;(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(package-initialize)
+
+;; Install 'use-package' if necessary
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; Load use-package and friends
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
+
+;;
+;; PACKAGES
+;;
+
+(use-package dash
+  :ensure t)
+
+(when (fboundp 'winner-mode)
+  (winner-mode 1))
+
+(use-package flycheck
+  :ensure t
+  :config
+  (progn
+    (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
+    (setq flycheck-idle-change-delay 10)
+    (add-hook 'prog-mode-hook 'global-flycheck-mode)
+    (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist)))
+  )
+
+(use-package hl-line
+  :config
+  (progn
+    ;; Highlight the line only in the active window
+    (setq hl-line-sticky-flag nil)
+
+    ;; hl-line+
+    ;; http://www.emacswiki.org/emacs/hl-line+.el
+    (use-package hl-line+
+      :ensure t
+      :config
+      (progn
+        (toggle-hl-line-when-idle 1) ; Highlight line only when idle
+        ;; Number of seconds of idle time after when the line should be highlighted
+        (setq hl-line-idle-interval 3)
+        ;; Number of seconds for `hl-line-flash' to highlight the line
+        (setq hl-line-flash-show-period 3))))
+  )
+
+
+;; Project management.
+(use-package projectile
+  :ensure t
+  :commands (projectile-find-file projectile-switch-project)
+  :diminish projectile-mode
+  :config
+  (progn
+    (setq projectile-enable-caching t)
+    
+    (projectile-mode))
+  )
+
+
+(use-package multiple-cursors
+  :ensure t
+  :config
+  (progn
+    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+    (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+    )
+  )
+
+(use-package emmet-mode
+  :ensure t
+  :init
+  (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'js2-mode-hook 'emmet-mode)
+  :config
+  (progn
+    (setq emmet-expand-jsx-className? t)
+    (setq emmet-move-cursor-between-quotes t)
+    )
+  )
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown")
+  )
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :init (yas-global-mode 1))
+
+;;; load yasnippet before auto-complete
+(defadvice ac-common-setup (after give-yasnippet-highest-priority activate)
+  (setq ac-sources (delq 'ac-source-yasnippet ac-sources))
+  (add-to-list 'ac-sources 'ac-source-yasnippet))
+
+(use-package org
+  :ensure t
+  :mode ("\\.org\\'" . org-mode)
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb)
+         ("C-c C-w" . org-refile)
+         ("C-c j" . org-clock-goto)
+         ("C-c C-x C-o" . org-clock-out)
+         )
+  :init
+  (progn
+    (setq org-todo-keywords
+          '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")))
+
+    (setq org-todo-keyword-faces
+          '(("TODO" . "#CC1B44")
+            ("VERIFY" . "#C97F50")
+            ("WAITING" . "#E0EBD1")
+            ("DONE" . "#9BA607")
+            ))
+    )
+  :config
+  (progn
+    (setq org-outline-path-complete-in-steps t)
+    (setq org-catch-invisible-edits t)
+    (setq org-directory "~/Org")
+    (setq org-agenda-files '("~/Org"))
+    (setq org-default-notes-file (concat org-directory "/Notes.org"))
+    (setq org-mobile-inbox-for-pull (concat org-directory "/Notes.org"))
+
+    ))
+
+(use-package org-bullets
+  :ensure t
+  :commands (org-bullets-mode)
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package prettier-js
+  :ensure t
+  :config
+  (progn
+    (setq prettier-js-args '(
+                             "--tab-width" "2"
+                             "--single-quote"
+                             "--jsx-bracket-same-line"
+                             ))
+    (add-hook 'js2-mode-hook 'prettier-js-mode)
+    ))
+
+(use-package expand-region
+  :ensure t
+  :bind (("C-=" . er/expand-region))
+)
+
+
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'company-mode)
+    (defvar company-mode/enable-yas t
+      "Enable yasnippet for all backends.")
+
+    (defun company-mode/backend-with-yas (backend)
+      (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+          backend
+        (append (if (consp backend) backend (list backend))
+                '(:with company-yasnippet))))
+
+    (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+    )
+  )
+
+(use-package recentf
+  :ensure t
+  :config (progn
+            (setq recentf-max-menu-items 25)
+            (setq recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.git/"))
+            (recentf-mode 1)
+            )
+  )
+
+(use-package ace-window
+  :ensure t
+  :bind
+  ("C-x o" . ace-window)
+  :init
+  (progn
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+
+    (setq aw-background nil)
+    (setq aw-dispatch-always t)
+    ))
+
+(use-package iedit
+  :ensure t)
+(use-package scss-mode
+  :ensure t
+  :mode "\\.scss\\'"
+  )
+
+(use-package smartparens
+  :ensure t
+  :init
+  (progn
+    (smartparens-global-mode 1)
+    (show-smartparens-global-mode 1))
+  :config
+  (progn
+    (add-hook 'sgml-mode  'smartparens-mode)
+    (add-hook 'js2-mode  'smartparens-mode)
+    )
+  :bind
+  ("C-M-k" . sp-kill-sexp)
+  ("C-M-f" . sp-forward-sexp)
+  ("C-M-b" . sp-backward-sexp)
+  ("C-M-n" . sp-up-sexp)
+  ("C-M-d" . sp-down-sexp)
+  ("C-M-u" . sp-backward-up-sexp)
+  ("C-M-p" . sp-backward-down-sexp)
+  ("C-M-w" . sp-copy-sexp))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
+
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html\\'"
+         "\\.css\\'"
+         "\\.php\\'")
+  :config
+  (progn
+    (setq web-mode-enable-auto-quoting nil)
+    ;; adjust indents for web-mode to 2 spaces
+    (defun my-web-mode-hook ()
+      "Hooks for Web mode. Adjust indents"
+      (setq web-mode-markup-indent-offset 2)
+      (setq web-mode-css-indent-offset 2)
+      (setq web-mode-code-indent-offset 2))
+
+    (add-hook 'web-mode-hook  'my-web-mode-hook)
+    ))
+
+
+(use-package js2-mode
+  :ensure t
+  :mode (
+         ("\\.js\\'" . js2-mode)
+         ("\\.jsx\\'" . js2-mode)
+         ("\\.es6\\'" . js2-mode)
+         )
+  :init
+  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
+  (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
+  :config
+  (progn
+    (setq js2-basic-offset 2)
+    (setq js2-highlight-level 3)
+    (setq js2-mode-show-strict-warnings nil)
+    (setq js2-mode-show-parse-errors nil)
+    )
+  )
+
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :init (load-theme 'sanityinc-tomorrow-night t)
+  )
+
+(use-package spaceline-config
+  :ensure spaceline
+  :config
+  (progn
+    (spaceline-spacemacs-theme)
+    (setq ns-use-srgb-colorspace nil)
+    )
+  )
+
+(use-package which-key
+  :ensure t
+  :diminish which-key-mode
+  :config (progn
+            (which-key-mode)
+            )
+  )
+
+(use-package drag-stuff
+  :ensure t
+  :config (progn
+            (drag-stuff-global-mode 1)
+            (drag-stuff-define-keys)
+            ))
+
+(use-package magit
+  :ensure t
+  :defer 2
+  :bind (("C-x g" . magit-status)))
+
+(use-package avy
+  :ensure t
+  :bind (("C-_" . avy-goto-char-timer)))
+
+(use-package ivy
+  :ensure t
+  :diminish ivy-mode
+  :bind
+  ("C-s" . swiper)
+  ("M-x" . counsel-M-x)
+  ("C-x C-f" . counsel-find-file)
+  ("M-y" . counsel-yank-pop)
+  ("C-c s" . counsel-ag)
+  ("C-c C-r" . ivy-resume)
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq ivy-height 15)
+    (setq ivy-initial-inputs-alist nil)
+    (setq ivy-re-builders-alist
+          '((t   . ivy--regex-ignore-order)))
+    )
+)
+
+(use-package counsel
+  :ensure t)
+
+(use-package swiper
+  :ensure t)
+
+(use-package counsel-projectile
+  :ensure t
+  :init
+  (counsel-projectile-on)
+  :bind
+  ("M-p" . counsel-projectile-find-file)
+  ("M-P" . counsel-projectile-switch-project)
+  )
+
+(use-package smex
+  :ensure t
+  :config
+  (smex-initialize))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  )
+;; Better imenu
+
+;; Modes
+;; - js2-refactor ? - intelligent replace
+;; - xref-js2 ? - navigate to functions
+;; - tern ? - js code analysis
+;; - hydra ? - check :)
+
+;; Load this computer custom settings file if exists
+(setq custom-file "~/.emacs.d/custom-settings.el")
+(load custom-file t)
+
+(put 'upcase-region 'disabled nil)
