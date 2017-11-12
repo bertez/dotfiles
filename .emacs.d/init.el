@@ -9,6 +9,9 @@
       initial-scratch-message nil
       initial-major-mode 'org-mode)
 
+;; tramp fix connections
+(setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+
 ;; UTF-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -484,7 +487,15 @@
   :ensure t
   :init
   (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)
+    (global-set-key (kbd "M-1") "|")
+    (global-set-key (kbd "M-2") "@")
+    (global-set-key (kbd "M-3") "#")
+    (global-set-key (kbd "M-º") "\\")
+    (global-set-key (kbd "M-ç") "}")
+    (global-set-key (kbd "M-+") "]")
+    (global-set-key (kbd "M-ñ") "~")
+    )
   )
 ;; Better imenu
 

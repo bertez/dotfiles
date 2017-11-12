@@ -124,7 +124,7 @@ export PATH="/Users/berto/.bin:$PATH"
 export PATH="$PATH:./node_modules/.bin"
 
 #local composer modules
-export PATH="$PATH:./vendor/bin"
+#export PATH="$PATH:./vendor/bin"
 
 #local web server
 alias serve='python -m SimpleHTTPServer'
