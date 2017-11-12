@@ -83,6 +83,20 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'before-save-hook 'untabify)
 
+;; Better defaults
+
+(setq save-interprogram-paste-before-kill t
+      apropos-do-all t
+      mouse-yank-at-point t
+      require-final-newline t
+      visible-bell t
+      load-prefer-newer t
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      )
+
+(autoload 'zap-up-to-char "misc"
+  "Kill up to, but not including ARGth occurrence of CHAR." t)
+
 ;;
 ;; GLOBAL KEYBINDINGS
 ;;
@@ -91,7 +105,7 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-unset-key "\C-z")
 (global-unset-key "\C-x\C-z")
-
+(global-set-key (kbd "M-z") 'zap-up-to-char)
 
 ;;
 ;; PACKAGE STUFF
@@ -463,7 +477,7 @@
 
 (use-package smex
   :ensure t
-  :config
+  :init
   (smex-initialize))
 
 (use-package exec-path-from-shell
