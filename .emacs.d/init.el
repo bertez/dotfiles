@@ -404,7 +404,8 @@
          ("\\.es6\\'" . js2-mode)
          )
   :init
-  (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+  (add-hook 'js2-mode-hook (lambda ()
+                             (js2-imenu-extras-mode)))
   (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
   (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
   :config
@@ -419,6 +420,32 @@
     (setq js2-bounce-indent-p t)
     )
   )
+
+(use-package tern
+  :if (executable-find "tern")
+  :ensure t
+  :diminish tern-mode
+  :config
+  (defun my-js-mode-hook ()
+    "Hook for `js-mode'."
+    (set (make-local-variable 'company-backends)
+         '((company-tern company-files company-yasnippet))))
+  (add-hook 'js2-mode-hook 'my-js-mode-hook)
+  (add-hook 'js2-mode-hook 'company-mode)
+  (add-hook 'js2-mode-hook 'tern-mode)
+  )
+
+(use-package company-tern
+  :if (executable-find "tern")
+  :ensure t
+  :config
+  ;; Disable completion keybindings, as we use xref-js2 instead
+  (define-key tern-mode-keymap (kbd "M-.") nil)
+  (define-key tern-mode-keymap (kbd "M-,") nil)
+)
+
+(use-package indium
+  :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t
