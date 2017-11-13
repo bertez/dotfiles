@@ -4,7 +4,7 @@
 ;; save the position of the cursor
 (save-place-mode 1)
 
-;; increase gb collection
+;; increase garbage collection
 (setq-default gc-cons-threshold 20000000)
 
 ;; remove splash screen and set default mode
@@ -40,7 +40,7 @@
 (when (not indicate-empty-lines)
   (toggle-indicate-empty-lines))
 
-;; tabs as 4 spaces
+;; tabs as 2 spaces
 (setq-default indent-tabs-mode nil)
 (setq tab-width 2)
 (setq-default sgml-basic-offset 2)
@@ -52,7 +52,7 @@
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-;; history
+;; save history
 (setq savehist-file "~/.emacs.d/savehist")
 (savehist-mode 1)
 (setq history-length t)
@@ -69,11 +69,11 @@
 ;; Disable bell
 (setq ring-bell-function 'ignore)
 
-;; echo keybindings faster
+;; echo keybindings to minibuffer faster
 (setq echo-keystrokes 0.1
       use-dialog-box nil)
 
-;; highlight parentheses
+;; highlight parens
 (show-paren-mode t)
 
 ;; line spacing
@@ -88,12 +88,11 @@
 ;; default TRAMP
 (setq tramp-default-method "ssh")
 
-;; Remove spaces and tabs on sabe
+;; Remove spaces and tabs on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'before-save-hook 'untabify)
 
 ;; Better defaults
-
 (setq save-interprogram-paste-before-kill t
       apropos-do-all t
       mouse-yank-at-point t
@@ -117,6 +116,7 @@
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "M-i") 'imenu)
 
 ;;
 ;; PACKAGE STUFF
@@ -330,11 +330,11 @@
   ("C-x o" . ace-window)
   :init
   (progn
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+    ;; (custom-set-faces
+    ;;  '(aw-leading-char-face
+    ;;    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
-    (setq aw-background nil)
+    ;; (setq aw-background nil)
     (setq aw-dispatch-always t)
     ))
 
@@ -444,6 +444,7 @@
 (use-package drag-stuff
   :ensure t
   :config (progn
+            (setq drag-stuff-modifier '(meta shift))
             (drag-stuff-global-mode 1)
             (drag-stuff-define-keys)
             ))
