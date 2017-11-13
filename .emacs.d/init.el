@@ -4,19 +4,25 @@
 ;; save the position of the cursor
 (save-place-mode 1)
 
+;; increase gb collection
+(setq-default gc-cons-threshold 20000000)
+
 ;; remove splash screen and set default mode
 (setq inhibit-splash-screen t
       initial-scratch-message nil
       initial-major-mode 'org-mode)
-
-;; tramp fix connections
-(setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
 ;; UTF-8
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+
+;; Disable lockfiles
+(setq create-lockfiles nil)
+
+;; revert buffer if file has changed
+(global-auto-revert-mode)
 
 ;; Remove menu bar and toolbar in GUI mode
 (menu-bar-mode -1)
@@ -400,6 +406,10 @@
     (setq js2-highlight-level 3)
     (setq js2-mode-show-strict-warnings nil)
     (setq js2-mode-show-parse-errors nil)
+    (setq js2-idle-timer-delay 1)
+    (setq js-indent-level 2)
+    (setq js-switch-indent-offset 2)
+    (setq js2-bounce-indent-p t)
     )
   )
 
@@ -500,6 +510,7 @@
 ;; Better imenu
 
 ;; Modes
+;; - indium ?
 ;; - js2-refactor ? - intelligent replace
 ;; - xref-js2 ? - navigate to functions
 ;; - tern ? - js code analysis
