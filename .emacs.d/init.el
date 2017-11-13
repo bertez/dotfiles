@@ -35,6 +35,13 @@
 ;; use system clipboard
 (setq select-enable-clipboard t)
 
+;; show directories first in dired
+(setq dired-listing-switches "-aBhl  --group-directories-first")
+
+;; scroll to top and bottom more naturally
+(setq scroll-error-top-bottom t)
+(require 'view)
+
 ;; show empty lines at the end
 (setq-default indicate-empty-lines t)
 (when (not indicate-empty-lines)
@@ -117,6 +124,8 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "M-i") 'imenu)
+(global-set-key (kbd "C-v")   'View-scroll-half-page-forward)
+(global-set-key (kbd "M-v")   'View-scroll-half-page-backward)
 
 ;;
 ;; PACKAGE STUFF
