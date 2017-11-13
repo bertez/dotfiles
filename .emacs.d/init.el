@@ -154,30 +154,27 @@
 (use-package flycheck
   :ensure t
   :config
-  (progn
-    (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
-    (setq flycheck-idle-change-delay 10)
-    (add-hook 'prog-mode-hook 'global-flycheck-mode)
-    (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist)))
+  (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
+  (setq flycheck-idle-change-delay 10)
+  (add-hook 'prog-mode-hook 'global-flycheck-mode)
+  (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   )
 
 (use-package hl-line
   :config
-  (progn
-    ;; Highlight the line only in the active window
-    (setq hl-line-sticky-flag nil)
+  ;; Highlight the line only in the active window
+  (setq hl-line-sticky-flag nil)
 
-    ;; hl-line+
-    ;; http://www.emacswiki.org/emacs/hl-line+.el
-    (use-package hl-line+
-      :ensure t
-      :config
-      (progn
-        (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-        ;; Number of seconds of idle time after when the line should be highlighted
-        (setq hl-line-idle-interval 3)
-        ;; Number of seconds for `hl-line-flash' to highlight the line
-        (setq hl-line-flash-show-period 3))))
+  ;; hl-line+
+  ;; http://www.emacswiki.org/emacs/hl-line+.el
+  (use-package hl-line+
+    :ensure t
+    :config
+    (toggle-hl-line-when-idle 1) ; Highlight line only when idle
+    ;; Number of seconds of idle time after when the line should be highlighted
+    (setq hl-line-idle-interval 3)
+    ;; Number of seconds for `hl-line-flash' to highlight the line
+    (setq hl-line-flash-show-period 3))
   )
 
 
@@ -187,21 +184,17 @@
   :commands (projectile-find-file projectile-switch-project)
   :diminish projectile-mode
   :config
-  (progn
-    (setq projectile-enable-caching t)
-    
-    (projectile-mode))
+  (setq projectile-enable-caching t)
+  (projectile-mode)
   )
 
 
 (use-package multiple-cursors
   :ensure t
   :config
-  (progn
-    (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-    (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-    (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-    )
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   )
 
 (use-package emmet-mode
@@ -210,10 +203,8 @@
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'js2-mode-hook 'emmet-mode)
   :config
-  (progn
-    (setq emmet-expand-jsx-className? t)
-    (setq emmet-move-cursor-between-quotes t)
-    )
+  (setq emmet-expand-jsx-className? t)
+  (setq emmet-move-cursor-between-quotes t)
   )
 
 (use-package markdown-mode
@@ -252,27 +243,24 @@
          ("C-c C-x C-o" . org-clock-out)
          )
   :init
-  (progn
-    (setq org-todo-keywords
-          '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")))
+  (setq org-todo-keywords
+        '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")))
 
-    (setq org-todo-keyword-faces
-          '(("TODO" . "#CC1B44")
-            ("VERIFY" . "#C97F50")
-            ("WAITING" . "#E0EBD1")
-            ("DONE" . "#9BA607")
-            ))
+  (setq org-todo-keyword-faces
+        '(("TODO" . "#CC1B44")
+          ("VERIFY" . "#C97F50")
+          ("WAITING" . "#E0EBD1")
+          ("DONE" . "#9BA607")
+          )
     )
   :config
-  (progn
-    (setq org-outline-path-complete-in-steps t)
-    (setq org-catch-invisible-edits t)
-    (setq org-directory "~/Org")
-    (setq org-agenda-files '("~/Org"))
-    (setq org-default-notes-file (concat org-directory "/Notes.org"))
-    (setq org-mobile-inbox-for-pull (concat org-directory "/Notes.org"))
-
-    ))
+  (setq org-outline-path-complete-in-steps t)
+  (setq org-catch-invisible-edits t)
+  (setq org-directory "~/Org")
+  (setq org-agenda-files '("~/Org"))
+  (setq org-default-notes-file (concat org-directory "/Notes.org"))
+  (setq org-mobile-inbox-for-pull (concat org-directory "/Notes.org"))
+  )
 
 (use-package org-bullets
   :ensure t
@@ -282,14 +270,13 @@
 (use-package prettier-js
   :ensure t
   :config
-  (progn
-    (setq prettier-js-args '(
-                             "--tab-width" "2"
-                             "--single-quote"
-                             "--jsx-bracket-same-line"
-                             ))
-    (add-hook 'js2-mode-hook 'prettier-js-mode)
-    ))
+  (setq prettier-js-args '(
+                           "--tab-width" "2"
+                           "--single-quote"
+                           "--jsx-bracket-same-line"
+                           ))
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  )
 
 (use-package expand-region
   :ensure t
@@ -301,28 +288,25 @@
   :ensure t
   :diminish company-mode
   :config
-  (progn
-    (add-hook 'prog-mode-hook 'company-mode)
-    (defvar company-mode/enable-yas t
-      "Enable yasnippet for all backends.")
+  (add-hook 'prog-mode-hook 'company-mode)
+  (defvar company-mode/enable-yas t
+    "Enable yasnippet for all backends.")
 
-    (defun company-mode/backend-with-yas (backend)
-      (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
-          backend
-        (append (if (consp backend) backend (list backend))
-                '(:with company-yasnippet))))
+  (defun company-mode/backend-with-yas (backend)
+    (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+        backend
+      (append (if (consp backend) backend (list backend))
+              '(:with company-yasnippet))))
 
-    (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-    )
+  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))  
   )
 
 (use-package recentf
   :ensure t
-  :config (progn
-            (setq recentf-max-menu-items 25)
-            (setq recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.git/"))
-            (recentf-mode 1)
-            )
+  :config
+  (setq recentf-max-menu-items 25)
+  (setq recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.git/"))
+  (recentf-mode 1)
   )
 
 (use-package ace-window
@@ -330,17 +314,17 @@
   :bind
   ("C-x o" . ace-window)
   :init
-  (progn
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :height 2.0)))))
+  (custom-set-faces
+   '(aw-leading-char-face
+     ((t (:inherit ace-jump-face-foreground :height 2.0)))))
 
-    (setq aw-background t)
-    (setq aw-dispatch-always t)
-    ))
+  (setq aw-background t)
+  (setq aw-dispatch-always t)
+  )
 
 (use-package iedit
   :ensure t)
+
 (use-package scss-mode
   :ensure t
   :mode "\\.scss\\'"
@@ -349,14 +333,11 @@
 (use-package smartparens
   :ensure t
   :init
-  (progn
-    (smartparens-global-mode 1)
-    (show-smartparens-global-mode 1))
+  (smartparens-global-mode 1)
+  (show-smartparens-global-mode 1)
   :config
-  (progn
-    (add-hook 'sgml-mode  'smartparens-mode)
-    (add-hook 'js2-mode  'smartparens-mode)
-    )
+  (add-hook 'sgml-mode  'smartparens-mode)
+  (add-hook 'js2-mode  'smartparens-mode)
   :bind
   ("C-M-k" . sp-kill-sexp)
   ("C-M-f" . sp-forward-sexp)
@@ -379,21 +360,20 @@
          "\\.css\\'"
          "\\.php\\'")
   :config
-  (progn
-    (setq web-mode-enable-auto-quoting nil)
-    ;; adjust indents for web-mode to 2 spaces
-    (defun my-web-mode-hook ()
-      "Hooks for Web mode. Adjust indents"
-      (setq-default
-       web-mode-markup-indent-offset 2
-       web-mode-css-indent-offset 2
-       web-mode-code-indent-offset 2
-       web-mode-enable-auto-closing t
-       web-mode-enable-auto-opening t
-       web-mode-enable-auto-indentation t))
-    
-    (add-hook 'web-mode-hook  'my-web-mode-hook)
-    ))
+  (setq web-mode-enable-auto-quoting nil)
+  ;; adjust indents for web-mode to 2 spaces
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode. Adjust indents"
+    (setq-default
+     web-mode-markup-indent-offset 2
+     web-mode-css-indent-offset 2
+     web-mode-code-indent-offset 2
+     web-mode-enable-auto-closing t
+     web-mode-enable-auto-opening t
+     web-mode-enable-auto-indentation t))
+  
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
+  )
 
 
 (use-package js2-mode
@@ -409,16 +389,14 @@
   (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
   (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
   :config
-  (progn
-    (setq js2-basic-offset 2)
-    (setq js2-highlight-level 3)
-    (setq js2-mode-show-strict-warnings nil)
-    (setq js2-mode-show-parse-errors nil)
-    (setq js2-idle-timer-delay 1)
-    (setq js-indent-level 2)
-    (setq js-switch-indent-offset 2)
-    (setq js2-bounce-indent-p t)
-    )
+  (setq js2-basic-offset 2)
+  (setq js2-highlight-level 3)
+  (setq js2-mode-show-strict-warnings nil)
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-idle-timer-delay 1)
+  (setq js-indent-level 2)
+  (setq js-switch-indent-offset 2)
+  (setq js2-bounce-indent-p t)
   )
 
 (use-package tern
@@ -455,27 +433,24 @@
 (use-package spaceline-config
   :ensure spaceline
   :config
-  (progn
-    (spaceline-spacemacs-theme)
-    (setq ns-use-srgb-colorspace nil)
-    )
+  (spaceline-spacemacs-theme)
+  (setq ns-use-srgb-colorspace nil)
   )
 
 (use-package which-key
   :ensure t
   :diminish which-key-mode
-  :config (progn
-            (which-key-mode)
-            )
+  :config 
+  (which-key-mode)
   )
 
 (use-package drag-stuff
   :ensure t
-  :config (progn
-            (setq drag-stuff-modifier '(meta shift))
-            (drag-stuff-global-mode 1)
-            (drag-stuff-define-keys)
-            ))
+  :config
+  (setq drag-stuff-modifier '(meta shift))
+  (drag-stuff-global-mode 1)
+  (drag-stuff-define-keys)
+  )
 
 (use-package magit
   :ensure t
@@ -497,16 +472,14 @@
   ("C-c s" . counsel-ag)
   ("C-c C-r" . ivy-resume)
   :config
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq ivy-height 15)
-    (setq ivy-initial-inputs-alist nil)
-    (setq ivy-re-builders-alist
-          '((t   . ivy--regex-ignore-order)))
-    )
-)
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq ivy-height 15)
+  (setq ivy-initial-inputs-alist nil)
+  (setq ivy-re-builders-alist
+        '((t   . ivy--regex-ignore-order)))
+  )
 
 (use-package counsel
   :ensure t)
@@ -544,45 +517,41 @@
   )
 
 (use-package erc
-  :init (progn
-          (use-package erc-truncate
-            :config (add-to-list 'erc-modules 'truncate))
-          (use-package erc-autoaway
-            :config (add-to-list 'erc-modules 'autoaway))
-          (use-package erc-notifications
-            :config (add-to-list 'erc-modules 'notifications))
-          (use-package erc-track
-            :config (erc-track-mode 1))
-          )
-  
+  :init
+  (use-package erc-truncate
+    :config (add-to-list 'erc-modules 'truncate))
+  (use-package erc-autoaway
+    :config (add-to-list 'erc-modules 'autoaway))
+  (use-package erc-notifications
+    :config (add-to-list 'erc-modules 'notifications))
+  (use-package erc-track
+    :config (erc-track-mode 1))
   :config
-  (progn
-    (setq erc-server-coding-system '(utf-8 . utf-8))
-    (setq erc-auto-discard-away t)
-    (setq erc-autoaway-idle-seconds 600)
-    (defvar erc-autoaway-use-emacs-idle t)
-    (setq erc-interpret-mirc-color t)
-    (setq erc-user-full-name "Berto Yáñez")
-    (setq erc-email-userid "berto@ber.to")
-    (setq erc-max-buffer-size 10000)
-    (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
-          erc-auto-query 'buffer
-          erc-server-auto-reconnect t
-          erc-server-reconnect-attempts 5
-          erc-server-reconnect-timeout 3
-          erc-rename-buffers t)
-    (setq erc-hide-list '("PART" "QUIT" "JOIN"))
-    (setq erc-autojoin-channels-alist '(("freenode.net"
-                                         "#emacs-beginners"
-                                         "#javascript"))
-          erc-server "irc.freenode.net"
-          erc-nick "bertez")
+  (defvar erc-autoaway-use-emacs-idle t)
+  (setq erc-server-coding-system '(utf-8 . utf-8)
+        erc-auto-discard-away t
+        erc-autoaway-idle-seconds 600
+        erc-interpret-mirc-color t
+        erc-user-full-name "Berto Yáñez"
+        erc-email-userid "berto@ber.to"
+        erc-max-buffer-size 10000
+        erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
+        erc-auto-query 'buffer
+        erc-server-auto-reconnect t
+        erc-server-reconnect-attempts 5
+        erc-server-reconnect-timeout 3
+        erc-rename-buffers t
+        erc-truncate-buffer-on-save t
+        erc-hide-list '("PART" "QUIT" "JOIN")
+        erc-autojoin-channels-alist '(("freenode.net"
+                                       "#emacs-beginners"
+                                       "#javascript"))
+        erc-server "irc.freenode.net"
+        erc-nick "bertez")
 
-    (defvar erc-insert-post-hook)
-    (add-hook 'erc-insert-post-hook
-              'erc-truncate-buffer)
-    (setq erc-truncate-buffer-on-save t)
-    )
+  (defvar erc-insert-post-hook)
+  (add-hook 'erc-insert-post-hook
+            'erc-truncate-buffer)
   )
 
 (use-package json-mode
