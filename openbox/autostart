@@ -1,0 +1,28 @@
+#
+# These things are run when an Openbox X Session is started.
+# You may place a similar script in $HOME/.config/openbox/autostart
+# to run user-specific things.
+#
+
+# If you want to use GNOME config tools...
+#
+#if test -x /usr/lib/openbox/gnome-settings-daemon >/dev/null; then
+#  /usr/lib/openbox/gnome-settings-daemon &
+#elif which gnome-settings-daemon >/dev/null 2>&1; then
+#  gnome-settings-daemon &
+#fi
+
+# If you want to use XFCE config tools...
+#
+#xfce-mcs-manager &
+
+
+xrandr --output VIRTUAL1 --off --output DP2 --off --output DP1 --off --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output VGA1 --off &
+compton -b --config $HOME/.config/compton.openbox.conf &
+feh --bg-fill $HOME/Stuff/bg.jpg &
+tint2 &
+sh -c "sleep 5s; neap" &
+xscreensaver -no-splash &
+volumeicon &
+conky -q -c $HOME/.config/conky/conky.conf &
+conky -q -c $HOME/.config/conky/conky2.conf &
