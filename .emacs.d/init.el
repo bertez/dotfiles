@@ -242,7 +242,6 @@
 
 (use-package org
   :ensure t
-  :pin org
   :defer t
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c l" . org-store-link)
@@ -347,6 +346,7 @@
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
   :config
+  (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
   (add-hook 'sgml-mode  'smartparens-mode)
   (add-hook 'js2-mode  'smartparens-mode)
   :bind
@@ -357,13 +357,12 @@
   ("C-M-d" . sp-down-sexp)
   ("C-M-u" . sp-backward-up-sexp)
   ("C-M-p" . sp-backward-down-sexp)
-  ("C-M-w" . sp-copy-sexp))
-
+  ("C-M-w" . sp-copy-sexp)
+  )
 (use-package rainbow-delimiters
   :ensure t
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
 
 (use-package web-mode
   :ensure t
@@ -385,7 +384,6 @@
   
   (add-hook 'web-mode-hook  'my-web-mode-hook)
   )
-
 
 (use-package js2-mode
   :ensure t
@@ -573,6 +571,11 @@
          ("\\.eslintrc\\'" . json-mode))
   :config (setq-default js-indent-level 2))
 
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode t)
+  )
 
 ;; Better imenu
 
