@@ -233,6 +233,8 @@
 
 (use-package org
   :ensure t
+  :pin org
+  :defer t
   :mode ("\\.org\\'" . org-mode)
   :bind (("C-c l" . org-store-link)
          ("C-c c" . org-capture)
@@ -466,6 +468,8 @@
   :diminish ivy-mode
   :bind
   ("C-s" . swiper)
+  ("C-S-s" . swiper-all)
+  ("C-r" . swiper)
   ("M-x" . counsel-M-x)
   ("C-x C-f" . counsel-find-file)
   ("M-y" . counsel-yank-pop)
