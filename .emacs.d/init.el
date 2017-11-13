@@ -115,6 +115,8 @@
 (global-unset-key "\C-z")
 (global-unset-key "\C-x\C-z")
 (global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
 ;;
 ;; PACKAGE STUFF
@@ -381,10 +383,14 @@
     ;; adjust indents for web-mode to 2 spaces
     (defun my-web-mode-hook ()
       "Hooks for Web mode. Adjust indents"
-      (setq web-mode-markup-indent-offset 2)
-      (setq web-mode-css-indent-offset 2)
-      (setq web-mode-code-indent-offset 2))
-
+      (setq-default
+       web-mode-markup-indent-offset 2
+       web-mode-css-indent-offset 2
+       web-mode-code-indent-offset 2
+       web-mode-enable-auto-closing t
+       web-mode-enable-auto-opening t
+       web-mode-enable-auto-indentation t))
+    
     (add-hook 'web-mode-hook  'my-web-mode-hook)
     ))
 
@@ -507,6 +513,50 @@
     (global-set-key (kbd "M-ñ") "~")
     )
   )
+
+(use-package erc
+  :init (progn
+          (use-package erc-truncate
+            :config (add-to-list 'erc-modules 'truncate))
+          (use-package erc-autoaway
+            :config (add-to-list 'erc-modules 'autoaway))
+          (use-package erc-notifications
+            :config (add-to-list 'erc-modules 'notifications))
+          (use-package erc-track
+            :config (erc-track-mode 1))
+          )
+  
+  :config
+  (progn
+    (setq erc-server-coding-system '(utf-8 . utf-8))
+    (setq erc-auto-discard-away t)
+    (setq erc-autoaway-idle-seconds 600)
+    (defvar erc-autoaway-use-emacs-idle t)
+    (setq erc-interpret-mirc-color t)
+    (setq erc-user-full-name "Berto Yáñez")
+    (setq erc-email-userid "berto@ber.to")
+    (setq erc-max-buffer-size 10000)
+    (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
+          erc-auto-query 'buffer
+          erc-server-auto-reconnect t
+          erc-server-reconnect-attempts 5
+          erc-server-reconnect-timeout 3
+          erc-rename-buffers t)
+    (setq erc-hide-list '("PART" "QUIT" "JOIN"))
+    (setq erc-autojoin-channels-alist '(("freenode.net"
+                                         "#emacs-beginners"
+                                         "#javascript"))
+          erc-server "irc.freenode.net"
+          erc-nick "bertez")
+
+    (defvar erc-insert-post-hook)
+    (add-hook 'erc-insert-post-hook
+              'erc-truncate-buffer)
+    (setq erc-truncate-buffer-on-save t)
+    )
+  )
+
+
 ;; Better imenu
 
 ;; Modes
