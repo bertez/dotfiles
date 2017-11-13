@@ -126,7 +126,8 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-;;(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (package-initialize)
 
 ;; Install 'use-package' if necessary
@@ -330,11 +331,11 @@
   ("C-x o" . ace-window)
   :init
   (progn
-    ;; (custom-set-faces
-    ;;  '(aw-leading-char-face
-    ;;    ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 2.0)))))
 
-    ;; (setq aw-background nil)
+    (setq aw-background t)
     (setq aw-dispatch-always t)
     ))
 
@@ -557,6 +558,12 @@
     )
   )
 
+(use-package json-mode
+  :ensure t
+  :mode (("\\.json\\'" . json-mode)
+         ("\\.eslintrc\\'" . json-mode))
+  :config (setq-default js-indent-level 2))
+
 
 ;; Better imenu
 
@@ -572,3 +579,4 @@
 (load custom-file t)
 
 (put 'upcase-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
