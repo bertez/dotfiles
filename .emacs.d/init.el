@@ -36,7 +36,7 @@
 (setq select-enable-clipboard t)
 
 ;; show directories first in dired
-(setq dired-listing-switches "-aBhl  --group-directories-first")
+(setq dired-listing-switches "-aBhl")
 
 ;; scroll to top and bottom more naturally
 (setq scroll-error-top-bottom t)
@@ -577,14 +577,8 @@
   (global-git-gutter-mode t)
   )
 
-;; Better imenu
 
-;; Modes
-;; - indium ?
-;; - js2-refactor ? - intelligent replace
-;; - xref-js2 ? - navigate to functions
-;; - tern ? - js code analysis
-;; - hydra ? - check :)
+
 
 ;; Load this computer custom settings file if exists
 (setq custom-file "~/.emacs.d/custom-settings.el")
