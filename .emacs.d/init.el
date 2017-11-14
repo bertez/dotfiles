@@ -342,6 +342,7 @@
 
 (use-package smartparens
   :ensure t
+  :diminish smartparens-mode
   :init
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
@@ -455,6 +456,7 @@
 
 (use-package drag-stuff
   :ensure t
+  :diminish drag-stuff-mode
   :config
   (setq drag-stuff-modifier '(meta shift))
   (drag-stuff-global-mode 1)
@@ -573,12 +575,10 @@
 
 (use-package git-gutter
   :ensure t
+  :diminish git-gutter-mode
   :config
   (global-git-gutter-mode t)
   )
-
-
-
 
 ;; Load this computer custom settings file if exists
 (setq custom-file "~/.emacs.d/custom-settings.el")
