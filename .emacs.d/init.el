@@ -577,9 +577,6 @@
   (global-git-gutter-mode t)
   )
 
-
-
-
 ;; Load this computer custom settings file if exists
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)

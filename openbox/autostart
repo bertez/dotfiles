@@ -16,12 +16,10 @@
 #
 #xfce-mcs-manager &
 
-
-xrandr --output VIRTUAL1 --off --output DP2 --off --output DP1 --off --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output VGA1 --off &
-compton -b --config $HOME/.config/compton.openbox.conf &
-feh --bg-fill $HOME/Stuff/bg.jpg &
+sh $HOME/.screenlayout/4m.sh &
+compton -b --config $HOME/.config/compton.conf &
+feh --bg-fill $HOME/.wallpaper.jpg &
 tint2 &
-sh -c "sleep 5s; neap" &
 xscreensaver -no-splash &
 volumeicon &
 conky -q -c $HOME/.config/conky/conky.conf &
