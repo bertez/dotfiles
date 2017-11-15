@@ -164,7 +164,7 @@
   :ensure t
   :config
   (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
-  (setq flycheck-idle-change-delay 10)
+  (setq flycheck-idle-change-delay 5)
   (add-hook 'prog-mode-hook 'global-flycheck-mode)
   (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   )
@@ -329,7 +329,6 @@
      ((t (:inherit ace-jump-face-foreground :height 2.0)))))
 
   (setq aw-background t)
-  (setq aw-dispatch-always t)
   )
 
 (use-package iedit
@@ -409,6 +408,10 @@
   (setq js2-bounce-indent-p t)
   )
 
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml$" . yaml-mode))
+
 (use-package tern
   :if (executable-find "tern")
   :ensure t
@@ -442,10 +445,12 @@
 
 (use-package spaceline-config
   :ensure spaceline
-  :config
-  (spaceline-spacemacs-theme)
+  :init
   (setq ns-use-srgb-colorspace nil)
-  )
+  (setq spaceline-minor-modes-p nil)
+  :config
+  (spaceline-emacs-theme))
+
 
 (use-package which-key
   :ensure t
