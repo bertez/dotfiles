@@ -18,15 +18,28 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
+;; Cursor
+(setq-default cursor-type 'box)
+(setq-default cursor-in-non-selected-windows 'bar)
+
 ;; Disable lockfiles
 (setq create-lockfiles nil)
 
 ;; revert buffer if file has changed
 (global-auto-revert-mode)
 
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
+
 ;; Remove menu bar and toolbar in GUI mode
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+
+;; sentences do not need double spaces
+(set-default 'sentence-end-double-space nil)
+
 
 ;; select like other editors
 (delete-selection-mode t)
@@ -69,6 +82,7 @@
       '(kill-ring
         search-ring
         regexp-search-ring))
+(setq save-interprogram-paste-before-kill t)
 
 ;; Fastest input
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -111,6 +125,9 @@
 
 (autoload 'zap-up-to-char "misc"
   "Kill up to, but not including ARGth occurrence of CHAR." t)
+
+;; scroll slower
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 ;;
 ;; GLOBAL KEYBINDINGS
@@ -314,7 +331,7 @@
 (use-package recentf
   :ensure t
   :config
-  (setq recentf-max-menu-items 25)
+  (setq recentf-max-menu-items 50)
   (setq recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.git/"))
   (recentf-mode 1)
   )
@@ -329,7 +346,6 @@
      ((t (:inherit ace-jump-face-foreground :height 2.0)))))
 
   (setq aw-background t)
-  (setq aw-dispatch-always t)
   )
 
 (use-package iedit
@@ -443,7 +459,7 @@
 (use-package spaceline-config
   :ensure spaceline
   :config
-  (spaceline-spacemacs-theme)
+  (spaceline-emacs-theme)
   (setq ns-use-srgb-colorspace nil)
   )
 
@@ -580,9 +596,12 @@
   (global-git-gutter-mode t)
   )
 
+
 ;; Load this computer custom settings file if exists
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
 
 (put 'upcase-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
+
+;;; init.el ends here
