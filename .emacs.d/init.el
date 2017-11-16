@@ -400,27 +400,20 @@
   :mode ("\\.html\\'"
          "\\.css\\'"
          "\\.php\\'")
-  :config
-  (setq web-mode-enable-auto-quoting nil)
-  ;; adjust indents for web-mode to 2 spaces
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode. Adjust indents"
-    (setq-default
-     web-mode-markup-indent-offset 2
-     web-mode-css-indent-offset 2
-     web-mode-code-indent-offset 2
-     web-mode-enable-auto-closing t
-     web-mode-enable-auto-opening t
-     web-mode-enable-auto-indentation t))
-  
-  (add-hook 'web-mode-hook  'my-web-mode-hook)
-  )
+  :init
+  (setq-default
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-enable-auto-closing t
+   web-mode-enable-auto-opening t
+   web-mode-enable-auto-quoting nil
+   web-mode-enable-auto-indentation t))
 
 (use-package js2-mode
   :ensure t
   :mode (
          ("\\.js\\'" . js2-mode)
-         ("\\.jsx\\'" . js2-mode)
          ("\\.es6\\'" . js2-mode)
          )
   :init
