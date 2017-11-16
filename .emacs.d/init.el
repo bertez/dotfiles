@@ -517,7 +517,7 @@
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-height 15)
+  (setq ivy-height 10)
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
         '((t   . ivy--regex-ignore-order)))
