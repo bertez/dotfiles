@@ -378,6 +378,7 @@
   (show-smartparens-global-mode 1)
   :config
   (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
+  (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
   (add-hook 'sgml-mode  'smartparens-mode)
   (add-hook 'js2-mode  'smartparens-mode)
   :bind
@@ -460,6 +461,7 @@
   )
 
 (use-package indium
+  :ensure t
   :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
