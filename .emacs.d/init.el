@@ -129,6 +129,12 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 (setq mouse-yank-at-point t)
 
+;; remove whitespace before save
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; stop in CamelCase
+(global-subword-mode 1)
+
 ;;
 ;; GLOBAL KEYBINDINGS
 ;;
@@ -179,8 +185,9 @@
 
 (use-package dired
   :init
+  (setq dired-dwim-target t)
   (setq global-auto-revert-non-file-buffers t)
-  ((setq )etq auto-revert-verbose nil)
+  (setq auto-revert-verbose nil)
 )
 
 (when (fboundp 'winner-mode)
@@ -188,6 +195,7 @@
 
 (use-package flycheck
   :ensure t
+  :diminish flycheck-mode
   :config
   (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
   (setq flycheck-idle-change-delay 5)
@@ -364,7 +372,7 @@
       (append (if (consp backend) backend (list backend))
               '(:with company-yasnippet))))
 
-  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))  
+  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
   )
 
 (use-package recentf
@@ -402,8 +410,16 @@
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
   :config
+  ;; (defun sp-web-mode-is-code-context (id action context)
+  ;;   (and (eq action 'insert)
+  ;;        (not (or (get-text-property (point) 'part-side)
+  ;;                 (get-text-property (point) 'block-side)))))
+
+  ;; (sp-local-pair 'web-mode "<" nil :when '(sp-web-mode-is-code-context))
   (sp-local-pair 'web-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
   (sp-local-pair 'web-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
+
+
   (add-hook 'sgml-mode  'smartparens-mode)
   (add-hook 'web-mode  'smartparens-mode)
   :bind
@@ -449,7 +465,7 @@
   :diminish tern-mode
   :config
   (setq tern-command (append tern-command '("--no-port-file")))
-  
+
   (defun my-js-mode-hook ()
     "Hook for `js-mode'."
     (set (make-local-variable 'company-backends)
@@ -488,7 +504,7 @@
 (use-package which-key
   :ensure t
   :diminish which-key-mode
-  :config 
+  :config
   (which-key-mode)
   )
 
@@ -618,6 +634,12 @@
   (global-git-gutter-mode t)
   )
 
+(use-package syntax-subword
+  :ensure t
+  :diminish subword-mode
+  :config
+  (setq syntax-subword-skip-spaces t)
+  )
 
 ;;
 ;; EXTRA STUFF
