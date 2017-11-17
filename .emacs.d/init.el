@@ -235,7 +235,6 @@
   :ensure t
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
-  (add-hook 'js2-mode-hook 'emmet-mode)
   :config
   (setq emmet-expand-jsx-className? t)
   (setq emmet-move-cursor-between-quotes t)
@@ -341,7 +340,7 @@
                            "--single-quote"
                            "--jsx-bracket-same-line"
                            ))
-  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'web-mode-hook 'prettier-js-mode)
   )
 
 (use-package expand-region
@@ -402,10 +401,10 @@
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
   :config
-  (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
-  (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
+  (sp-local-pair 'web-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
+  (sp-local-pair 'web-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
   (add-hook 'sgml-mode  'smartparens-mode)
-  (add-hook 'js2-mode  'smartparens-mode)
+  (add-hook 'web-mode  'smartparens-mode)
   :bind
   ("C-M-k" . sp-kill-sexp)
   ("C-M-f" . sp-forward-sexp)
@@ -425,6 +424,9 @@
   :ensure t
   :mode ("\\.html\\'"
          "\\.css\\'"
+         "\\.js\\'"
+         "\\.jsx\\'"
+         "\\.es6\\'"
          "\\.php\\'")
   :init
   (setq-default
@@ -435,28 +437,6 @@
    web-mode-enable-auto-opening t
    web-mode-enable-auto-quoting nil
    web-mode-enable-auto-indentation t))
-
-(use-package js2-mode
-  :ensure t
-  :mode (
-         ("\\.js\\'" . js2-mode)
-         ("\\.es6\\'" . js2-mode)
-         )
-  :init
-  (add-hook 'js2-mode-hook (lambda ()
-                             (js2-imenu-extras-mode)))
-  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-jsx-mode))
-  (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode))
-  :config
-  (setq js2-basic-offset 2)
-  (setq js2-highlight-level 3)
-  (setq js2-mode-show-strict-warnings nil)
-  (setq js2-mode-show-parse-errors nil)
-  (setq js2-idle-timer-delay 1)
-  (setq js-indent-level 2)
-  (setq js-switch-indent-offset 2)
-  (setq js2-bounce-indent-p t)
-  )
 
 (use-package yaml-mode
   :ensure t
@@ -473,23 +453,22 @@
     "Hook for `js-mode'."
     (set (make-local-variable 'company-backends)
          '((company-tern company-files company-yasnippet))))
-  (add-hook 'js2-mode-hook 'my-js-mode-hook)
-  (add-hook 'js2-mode-hook 'company-mode)
-  (add-hook 'js2-mode-hook 'tern-mode)
+  (add-hook 'web-mode-hook 'my-js-mode-hook)
+  (add-hook 'web-mode-hook 'company-mode)
+  (add-hook 'web-mode-hook 'tern-mode)
   )
 
 (use-package company-tern
   :if (executable-find "tern")
   :ensure t
   :config
-  ;; Disable completion keybindings, as we use xref-js2 instead
   (define-key tern-mode-keymap (kbd "M-.") nil)
   (define-key tern-mode-keymap (kbd "M-,") nil)
   )
 
 (use-package indium
   :ensure t
-  :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
+  :config (add-hook 'web-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t
@@ -637,6 +616,11 @@
   :config
   (global-git-gutter-mode t)
   )
+
+
+;;
+;; EXTRA STUFF
+;;
 
 
 ;; Load this computer custom settings file if exists
