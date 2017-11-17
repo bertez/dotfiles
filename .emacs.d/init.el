@@ -403,6 +403,7 @@
   (show-smartparens-global-mode 1)
   :config
   (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
+  (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
   (add-hook 'sgml-mode  'smartparens-mode)
   (add-hook 'js2-mode  'smartparens-mode)
   :bind
@@ -425,27 +426,20 @@
   :mode ("\\.html\\'"
          "\\.css\\'"
          "\\.php\\'")
-  :config
-  (setq web-mode-enable-auto-quoting nil)
-  ;; adjust indents for web-mode to 2 spaces
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode. Adjust indents"
-    (setq-default
-     web-mode-markup-indent-offset 2
-     web-mode-css-indent-offset 2
-     web-mode-code-indent-offset 2
-     web-mode-enable-auto-closing t
-     web-mode-enable-auto-opening t
-     web-mode-enable-auto-indentation t))
-  
-  (add-hook 'web-mode-hook  'my-web-mode-hook)
-  )
+  :init
+  (setq-default
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-enable-auto-closing t
+   web-mode-enable-auto-opening t
+   web-mode-enable-auto-quoting nil
+   web-mode-enable-auto-indentation t))
 
 (use-package js2-mode
   :ensure t
   :mode (
          ("\\.js\\'" . js2-mode)
-         ("\\.jsx\\'" . js2-mode)
          ("\\.es6\\'" . js2-mode)
          )
   :init
@@ -494,6 +488,7 @@
   )
 
 (use-package indium
+  :ensure t
   :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
@@ -551,7 +546,7 @@
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-height 15)
+  (setq ivy-height 10)
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
         '((t   . ivy--regex-ignore-order)))
