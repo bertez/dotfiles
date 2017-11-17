@@ -36,6 +36,7 @@
 ;; Remove menu bar and toolbar in GUI mode
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; sentences do not need double spaces
 (set-default 'sentence-end-double-space nil)
@@ -54,6 +55,9 @@
 ;; scroll to top and bottom more naturally
 (setq scroll-error-top-bottom t)
 (require 'view)
+(setq scroll-step            1
+      scroll-conservatively  10000)
+
 
 ;; show empty lines at the end
 (setq-default indicate-empty-lines t)
@@ -128,6 +132,7 @@
 
 ;; scroll slower
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+(setq mouse-yank-at-point t)
 
 ;;
 ;; GLOBAL KEYBINDINGS
@@ -167,6 +172,9 @@
 (require 'diminish)
 (require 'bind-key)
 
+;; large file warning (10MB)
+(setq large-file-warning-threshold 10000000)
+
 ;;
 ;; PACKAGES
 ;;
@@ -181,7 +189,7 @@
   :ensure t
   :config
   (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
-  (setq flycheck-idle-change-delay 10)
+  (setq flycheck-idle-change-delay 5)
   (add-hook 'prog-mode-hook 'global-flycheck-mode)
   (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
   )
@@ -279,20 +287,51 @@
           ("WAITING" . "#E0EBD1")
           ("DONE" . "#9BA607")
           )
-    )
+        )
+
+  ;;set priority range from A to C with default A
+  (setq org-highest-priority ?A)
+  (setq org-lowest-priority ?C)
+  (setq org-default-priority ?A)
+
+  ;;set colours for priorities
+  (setq org-priority-faces '((?A . (:foreground "#F0DFAF" :weight bold))
+                             (?B . (:foreground "LightSteelBlue"))
+                             (?C . (:foreground "OliveDrab"))))
+
+  ;;open agenda in current window
+  (setq org-agenda-window-setup (quote current-window))
+
+  ;;capture todo items using C-c c t
+  ;; (define-key global-map (kbd "C-c c") 'org-capture)
+  (setq org-capture-templates
+        '(("t" "todo" entry (file+headline "~/Dropbox/Org/Notes.org" "Tasks")
+           "* TODO [#A] %?")))
+
   :config
   (setq org-outline-path-complete-in-steps t)
   (setq org-catch-invisible-edits t)
-  (setq org-directory "~/Org")
-  (setq org-agenda-files '("~/Org"))
-  (setq org-default-notes-file (concat org-directory "/Notes.org"))
-  (setq org-mobile-inbox-for-pull (concat org-directory "/Notes.org"))
+  (setq org-directory "~/Dropbox/Org")
+  (setq org-agenda-files '("~/Dropbox/Org"))
+  (setq org-default-notes-file (concat org-directory "~/Dropbox/Org/Notes.org"))
+  (setq org-mobile-inbox-for-pull (concat org-directory "~/Dropbox/Org/Notes.org"))
   )
 
 (use-package org-bullets
   :ensure t
   :commands (org-bullets-mode)
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package ox-reveal
+  :ensure ox-reveal
+  :init
+  (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+  (setq org-reveal-mathjax t)
+  )
+
+(use-package htmlize
+  :ensure t)
+
 
 (use-package prettier-js
   :ensure t
@@ -308,7 +347,7 @@
 (use-package expand-region
   :ensure t
   :bind (("C-=" . er/expand-region))
-)
+  )
 
 
 (use-package company
@@ -425,11 +464,17 @@
   (setq js2-bounce-indent-p t)
   )
 
+(use-package yaml-mode
+  :ensure t
+  :mode ("\\.yml$" . yaml-mode))
+
 (use-package tern
   :if (executable-find "tern")
   :ensure t
   :diminish tern-mode
   :config
+  (setq tern-command (append tern-command '("--no-port-file")))
+  
   (defun my-js-mode-hook ()
     "Hook for `js-mode'."
     (set (make-local-variable 'company-backends)
@@ -446,7 +491,7 @@
   ;; Disable completion keybindings, as we use xref-js2 instead
   (define-key tern-mode-keymap (kbd "M-.") nil)
   (define-key tern-mode-keymap (kbd "M-,") nil)
-)
+  )
 
 (use-package indium
   :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
@@ -458,10 +503,12 @@
 
 (use-package spaceline-config
   :ensure spaceline
-  :config
-  (spaceline-emacs-theme)
+  :init
   (setq ns-use-srgb-colorspace nil)
-  )
+  (setq spaceline-minor-modes-p nil)
+  :config
+  (spaceline-emacs-theme))
+
 
 (use-package which-key
   :ensure t
