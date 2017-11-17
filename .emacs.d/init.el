@@ -28,11 +28,6 @@
 ;; revert buffer if file has changed
 (global-auto-revert-mode)
 
-;; Also auto refresh dired, but be quiet about it
-(setq global-auto-revert-non-file-buffers t)
-(setq auto-revert-verbose nil)
-
-
 ;; Remove menu bar and toolbar in GUI mode
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -181,6 +176,12 @@
 
 (use-package dash
   :ensure t)
+
+(use-package dired
+  :init
+  (setq global-auto-revert-non-file-buffers t)
+  ((setq )etq auto-revert-verbose nil)
+)
 
 (when (fboundp 'winner-mode)
   (winner-mode 1))
