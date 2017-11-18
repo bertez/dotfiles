@@ -650,7 +650,27 @@
   )
 
 
+(use-package elfeed
+  :ensure t
+  :init
+  (setq elfeed-db-directory "~/Dropbox/shared/elfeeddb")
+  :bind
+  ("C-c f" . elfeed)
+  )
 
+(use-package elfeed-goodies
+  :ensure t
+  :config
+  (elfeed-goodies/setup))
+
+
+(use-package elfeed-org
+  :ensure t
+  :init
+  (setq rmh-elfeed-org-files (list "~/Dropbox/Org/feeds/feeds.org"))
+  :config
+  (elfeed-org)
+  )
 
 
 ;;
