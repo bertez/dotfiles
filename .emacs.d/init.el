@@ -602,6 +602,7 @@
   (defun web-tern-mode-hook ()
     (progn
       (tern-mode)
+      (syntax-subword-mode)
       (add-to-list 'company-backends 'company-tern)
       )
     )
