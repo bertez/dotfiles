@@ -188,7 +188,7 @@
   (setq dired-dwim-target t)
   (setq global-auto-revert-non-file-buffers t)
   (setq auto-revert-verbose nil)
-)
+  )
 
 (when (fboundp 'winner-mode)
   (winner-mode 1))
@@ -443,13 +443,23 @@
   :ensure t
   :mode ("\\.yml$" . yaml-mode))
 
+(use-package tern-auto-complete
+  :ensure t)
+
 (use-package tern
-  :if (executable-find "tern")
   :ensure t
+  :defer t
   :diminish tern-mode
   :config
   (setq tern-command (append tern-command '("--no-port-file")))
-  (add-hook 'web-mode-hook 'tern-mode)
+  (defun web-tern-mode-hook ()
+    (progn
+      (tern-mode)
+      (tern-ac-setup)
+      )
+    )
+  (add-hook 'web-mode-hook  'web-tern-mode-hook)
+
   )
 
 (use-package indium
