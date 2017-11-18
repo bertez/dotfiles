@@ -358,23 +358,6 @@
   )
 
 
-(use-package company
-  :ensure t
-  :diminish company-mode
-  :config
-  (add-hook 'prog-mode-hook 'company-mode)
-  (defvar company-mode/enable-yas t
-    "Enable yasnippet for all backends.")
-
-  (defun company-mode/backend-with-yas (backend)
-    (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
-        backend
-      (append (if (consp backend) backend (list backend))
-              '(:with company-yasnippet))))
-
-  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-  )
-
 (use-package recentf
   :ensure t
   :config
@@ -452,6 +435,7 @@
    web-mode-code-indent-offset 2
    web-mode-enable-auto-closing t
    web-mode-enable-auto-opening t
+   web-mode-enable-auto-pairing nil
    web-mode-enable-auto-quoting nil
    web-mode-enable-auto-indentation t))
 
@@ -465,22 +449,7 @@
   :diminish tern-mode
   :config
   (setq tern-command (append tern-command '("--no-port-file")))
-
-  (defun my-js-mode-hook ()
-    "Hook for `js-mode'."
-    (set (make-local-variable 'company-backends)
-         '((company-tern company-files company-yasnippet))))
-  (add-hook 'web-mode-hook 'my-js-mode-hook)
-  (add-hook 'web-mode-hook 'company-mode)
   (add-hook 'web-mode-hook 'tern-mode)
-  )
-
-(use-package company-tern
-  :if (executable-find "tern")
-  :ensure t
-  :config
-  (define-key tern-mode-keymap (kbd "M-.") nil)
-  (define-key tern-mode-keymap (kbd "M-,") nil)
   )
 
 (use-package indium
@@ -540,12 +509,15 @@
   ("C-c C-r" . ivy-resume)
   :config
   (ivy-mode 1)
+  :init
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
+  ;; (setq ivy-count-format "(%d/%d) ")
   (setq ivy-height 10)
   (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
         '((t   . ivy--regex-ignore-order)))
+  (setq ivy-display-style 'fancy)
+
   )
 
 (use-package counsel
@@ -641,6 +613,13 @@
   (setq syntax-subword-skip-spaces t)
   )
 
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    ))
 ;;
 ;; EXTRA STUFF
 ;;
