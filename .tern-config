@@ -1,0 +1,14 @@
+{
+  "libs": [
+    "browser",
+    "ecmascript",
+    "jquery",
+    "underscore"
+  ],
+  "plugins": {
+    "node": {},
+    "doc_comment": null,
+    "es_modules": {},
+    "webpack": {}
+  }
+}

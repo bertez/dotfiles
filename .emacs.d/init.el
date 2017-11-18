@@ -36,7 +36,6 @@
 ;; sentences do not need double spaces
 (set-default 'sentence-end-double-space nil)
 
-
 ;; select like other editors
 (delete-selection-mode t)
 (transient-mark-mode t)
@@ -263,16 +262,6 @@
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package yasnippet
-  :ensure t
-  :diminish yas-minor-mode
-  :init (yas-global-mode 1))
-
-;;; load yasnippet before auto-complete
-(defadvice ac-common-setup (after give-yasnippet-highest-priority activate)
-  (setq ac-sources (delq 'ac-source-yasnippet ac-sources))
-  (add-to-list 'ac-sources 'ac-source-yasnippet))
-
 (use-package org
   :ensure t
   :defer t
@@ -443,27 +432,9 @@
   :ensure t
   :mode ("\\.yml$" . yaml-mode))
 
-(use-package tern-auto-complete
-  :ensure t)
-
-(use-package tern
-  :ensure t
-  :defer t
-  :diminish tern-mode
-  :config
-  (setq tern-command (append tern-command '("--no-port-file")))
-  (defun web-tern-mode-hook ()
-    (progn
-      (tern-mode)
-      (tern-ac-setup)
-      )
-    )
-  (add-hook 'web-mode-hook  'web-tern-mode-hook)
-
-  )
-
 (use-package indium
   :ensure t
+  :diminish indium-interaction-mode
   :config (add-hook 'web-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
@@ -623,17 +594,68 @@
   (setq syntax-subword-skip-spaces t)
   )
 
-(use-package auto-complete
+(use-package tern
+  :ensure t
+  :defer t
+  :config
+  (setq tern-command (append tern-command '("--no-port-file")))
+  (defun web-tern-mode-hook ()
+    (progn
+      (tern-mode)
+      (add-to-list 'company-backends 'company-tern)
+      )
+    )
+  (add-hook 'web-mode-hook  'web-tern-mode-hook)
+
+  )
+
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :init (yas-global-mode 1))
+
+(use-package company
+  :ensure t
+  :diminish company-mode
+  :config
+  (global-company-mode 1)
+  (setq
+   company-echo-delay 0
+   company-idle-delay 0.2
+   company-minimum-prefix-length 1
+   company-tooltip-align-annotations t
+   company-tooltip-limit 10
+   company-tooltip-flip-when-above t
+   company-dabbrev-downcase nil
+   company-require-match nil
+   company-begin-commands '(self-insert-command))
+  )
+
+(use-package company-tern
   :ensure t
   :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t)
-    ))
+  (add-to-list 'company-backends 'company-tern)
+  :config
+  (setq company-tern-property-marker nil)
+  )
+
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :init
+  (setq undo-tree-visualizer-relative-timestamps t
+        undo-tree-visualizer-timestamps t)
+  :config
+  (global-undo-tree-mode t)
+  )
+
+
+
+
+
 ;;
 ;; EXTRA STUFF
 ;;
-
 
 ;; Load this computer custom settings file if exists
 (setq custom-file "~/.emacs.d/custom-settings.el")
