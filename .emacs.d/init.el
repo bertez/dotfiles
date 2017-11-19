@@ -329,7 +329,6 @@
 (use-package htmlize
   :ensure t)
 
-
 (use-package prettier-js
   :ensure t
   :config
@@ -345,7 +344,6 @@
   :ensure t
   :bind (("C-=" . er/expand-region))
   )
-
 
 (use-package recentf
   :ensure t
@@ -426,7 +424,8 @@
    web-mode-enable-auto-opening t
    web-mode-enable-auto-pairing nil
    web-mode-enable-auto-quoting nil
-   web-mode-enable-auto-indentation t))
+   web-mode-enable-auto-indentation t)
+  )
 
 (use-package yaml-mode
   :ensure t
@@ -607,7 +606,6 @@
       )
     )
   (add-hook 'web-mode-hook  'web-tern-mode-hook)
-
   )
 
 (use-package yasnippet
@@ -650,7 +648,6 @@
   (global-undo-tree-mode t)
   )
 
-
 (use-package elfeed
   :ensure t
   :init
@@ -662,8 +659,8 @@
 (use-package elfeed-goodies
   :ensure t
   :config
-  (elfeed-goodies/setup))
-
+  (elfeed-goodies/setup)
+  )
 
 (use-package elfeed-org
   :ensure t
@@ -673,7 +670,6 @@
   (elfeed-org)
   )
 
-
 (use-package hydra
   :ensure t
   :defer t
@@ -682,76 +678,14 @@
     "zoom"
     ("g" text-scale-increase)
     ("l" text-scale-decrease))
-
-  (defhydra hydra-window (global-map "<f5>")
-    "
-Movement^^        ^Split^         ^Switch^		^Resize^
-----------------------------------------------------------------
-_h_ ←         _v_ertical      _b_uffer        _q_ X←
-_j_ ↓         _x_ horizontal	_f_ind files    _w_ X↓
-_k_ ↑         _z_ undo        _a_ce 1         _e_ X↑
-_l_ →         _Z_ reset       _s_wap          _r_ X→
-_F_ollow      _D_lt Other     _S_ave          max_i_mize
-_SPC_ cancel	_o_nly this     _d_elete
-"
-    ("h" windmove-left)
-    ("j" windmove-down)
-    ("k" windmove-up)
-    ("l" windmove-right)
-    ("q" hydra-move-splitter-left)
-    ("w" hydra-move-splitter-down)
-    ("e" hydra-move-splitter-up)
-    ("r" hydra-move-splitter-right)
-    ("b" helm-mini)
-    ("f" helm-find-files)
-    ("F" follow-mode)
-    ("a" (lambda ()
-           (interactive)
-           (ace-window 1)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body))
-     )
-    ("v" (lambda ()
-           (interactive)
-           (split-window-right)
-           (windmove-right))
-     )
-    ("x" (lambda ()
-           (interactive)
-           (split-window-below)
-           (windmove-down))
-     )
-    ("s" (lambda ()
-           (interactive)
-           (ace-window 4)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)))
-    ("S" save-buffer)
-    ("d" delete-window)
-    ("D" (lambda ()
-           (interactive)
-           (ace-window 16)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body))
-     )
-    ("o" delete-other-windows)
-    ("i" ace-maximize-window)
-    ("z" (progn
-           (winner-undo)
-           (setq this-command 'winner-undo))
-     )
-    ("Z" winner-redo)
-    ("SPC" nil)
-    )
-
-
 )
+
+
 
 
 ;;
 ;; EXTRA STUFF
 ;;
-
 ;; Load this computer custom settings file if exists
 (setq custom-file "~/.emacs.d/custom-settings.el")
 (load custom-file t)
