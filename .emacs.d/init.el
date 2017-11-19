@@ -32,7 +32,7 @@
 (global-auto-revert-mode)
 
 ;; Remove menu bar and toolbar in GUI mode
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
@@ -436,16 +436,24 @@
    web-mode-enable-auto-pairing nil
    web-mode-enable-auto-quoting nil
    web-mode-enable-auto-indentation t)
+
+  :config
+  (defun my-web-mode-hook ()
+    "Web mode hook :)"
+    (progn
+      (tern-mode)
+      (syntax-subword-mode)
+      (push '(company-tern :with company-yasnippet) company-backends)
+      )
+    )
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
   )
+
 
 (use-package yaml-mode
   :ensure t
   :mode ("\\.yml$" . yaml-mode))
 
-;; (use-package indium
-;;   :ensure t
-;;   :diminish indium-interaction-mode
-;;   :config (add-hook 'web-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t
@@ -461,12 +469,12 @@
   (spaceline-emacs-theme))
 
 
-;; (use-package which-key
-;;   :ensure t
-;;   :diminish which-key-mode
-;;   :config
-;;   (which-key-mode)
-;;   )
+(use-package which-key
+  :ensure t
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  )
 
 (use-package drag-stuff
   :ensure t
@@ -609,20 +617,12 @@
   :defer t
   :config
   (setq tern-command (append tern-command '("--no-port-file")))
-  (defun web-tern-mode-hook ()
-    (progn
-      (tern-mode)
-      (syntax-subword-mode)
-      (add-to-list 'company-backends 'company-tern)
-      )
-    )
-  (add-hook 'web-mode-hook  'web-tern-mode-hook)
   )
 
-;; (use-package yasnippet
-;;   :ensure t
-;;   :diminish yas-minor-mode
-;;   :init (yas-global-mode 1))
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :init (yas-global-mode 1))
 
 (use-package company
   :ensure t
@@ -639,6 +639,19 @@
    company-dabbrev-downcase nil
    company-require-match nil
    company-begin-commands '(self-insert-command))
+
+  ;; Add yasnippet support for all company backends
+  ;; https://github.com/syl20bnr/spacemacs/pull/179
+  (defvar company-mode/enable-yas t
+    "Enable yasnippet for all backends.")
+
+  (defun company-mode/backend-with-yas (backend)
+    (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+        backend
+      (append (if (consp backend) backend (list backend))
+              '(:with company-yasnippet))))
+
+  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
   )
 
 (use-package company-tern
@@ -680,6 +693,10 @@
   :ensure t
   :init
   (setq elfeed-db-directory "~/Dropbox/shared/elfeeddb")
+  (setq-default elfeed-search-filter "@1-week-ago +unread ")
+  :config
+  (defun elfeed-search-format-date (date)
+    (format-time-string "%d/%m/%Y %H:%M" (seconds-to-time date)))
   :bind
   ("C-x w" . my/elfeed-load-db-and-open)
   (:map elfeed-search-mode-map
