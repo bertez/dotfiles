@@ -520,13 +520,12 @@
 
      (use-package js2-mode
        :ensure t
-       :mode (("\\.js\\'" . js2-jsx-mode))
+       :mode (("\\.jsx?\\'" . js2-jsx-mode))
        :init
        (add-hook 'js2-mode-hook (lambda ()
                                   (tern-mode)
                                   (syntax-subword-mode)
                                   (push '(company-tern :with company-yasnippet) company-backends)
-
                                   (js2-imenu-extras-mode 1)))
        :config
        (setq js2-basic-offset 2)
@@ -542,14 +541,6 @@
        (add-hook 'js2-mode-hook #'js2-refactor-mode)
        :config
        (js2r-add-keybindings-with-prefix "C-c r")
-       )
-
-     (use-package rjsx-mode
-       :ensure t
-       :defer 1
-       :mode "\\.jsx$"
-       :init
-       (add-hook 'rjsx-mode-hook 'emmet-mode)
        )
 
      (use-package yasnippet
@@ -669,6 +660,8 @@
               ("C-c C-w" . org-refile)
               )
        :init
+       (define-obsolete-function-alias 'org-define-error 'define-error)
+       (setq org-src-fontify-natively t)
        (setq org-todo-keywords
              '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")))
 
