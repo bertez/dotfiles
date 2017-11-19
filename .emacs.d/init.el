@@ -431,10 +431,10 @@
   :ensure t
   :mode ("\\.yml$" . yaml-mode))
 
-(use-package indium
-  :ensure t
-  :diminish indium-interaction-mode
-  :config (add-hook 'web-mode-hook 'indium-interaction-mode))
+;; (use-package indium
+;;   :ensure t
+;;   :diminish indium-interaction-mode
+;;   :config (add-hook 'web-mode-hook 'indium-interaction-mode))
 
 (use-package color-theme-sanityinc-tomorrow
   :ensure t
@@ -608,10 +608,10 @@
   (add-hook 'web-mode-hook  'web-tern-mode-hook)
   )
 
-(use-package yasnippet
-  :ensure t
-  :diminish yas-minor-mode
-  :init (yas-global-mode 1))
+;; (use-package yasnippet
+;;   :ensure t
+;;   :diminish yas-minor-mode
+;;   :init (yas-global-mode 1))
 
 (use-package company
   :ensure t
@@ -648,18 +648,32 @@
   (global-undo-tree-mode t)
   )
 
+
+;;http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
+;;makes sure elfeed reads index from disk before launching
+(defun my/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening."
+  (interactive)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
+
+;;write to disk when quiting
+(defun my/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer."
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
 (use-package elfeed
   :ensure t
   :init
   (setq elfeed-db-directory "~/Dropbox/shared/elfeeddb")
   :bind
-  ("C-c f" . elfeed)
-  )
-
-(use-package elfeed-goodies
-  :ensure t
-  :config
-  (elfeed-goodies/setup)
+  ("C-x w" . my/elfeed-load-db-and-open)
+  (:map elfeed-search-mode-map
+              ("q" . my/elfeed-save-db-and-bury)
+              ("Q" . my/elfeed-save-db-and-bury))
   )
 
 (use-package elfeed-org
@@ -674,10 +688,11 @@
   :ensure t
   :defer t
   :init
-  (defhydra hydra-zoom (global-map "<f2>")
+  (defhydra hydra-zoom ()
     "zoom"
     ("g" text-scale-increase)
     ("l" text-scale-decrease))
+  (global-set-key (kbd "<f2>") 'hydra-zoom/body)
 )
 
 
