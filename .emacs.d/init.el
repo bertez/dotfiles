@@ -13,10 +13,13 @@
       initial-major-mode 'org-mode)
 
 ;; UTF-8
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
+(setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(when (display-graphic-p)
+   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
 
 ;; Cursor
 (setq-default cursor-type 'box)
@@ -134,6 +137,10 @@
 ;; stop in CamelCase
 (global-subword-mode 1)
 
+;; better line wrapping
+(global-visual-line-mode)
+
+
 ;;
 ;; GLOBAL KEYBINDINGS
 ;;
@@ -156,9 +163,13 @@
 ;; Init package stuff
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/"))
+
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 ;; Install 'use-package' if necessary
@@ -695,7 +706,13 @@
   (global-set-key (kbd "<f2>") 'hydra-zoom/body)
 )
 
-
+(use-package highlight-numbers
+  :ensure t
+  :defer t
+  :commands (highlight-numbers-mode)
+  :init
+  (add-hook 'prog-mode-hook #'highlight-numbers-mode)
+  )
 
 
 ;;
