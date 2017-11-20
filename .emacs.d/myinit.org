@@ -204,7 +204,7 @@
        :ensure t
        :diminish flycheck-mode
        :config
-       (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change))
+       (setq flycheck-check-syntax-automatically '(save idle-change new-line))
        (setq flycheck-idle-change-delay 5)
        (add-hook 'prog-mode-hook 'global-flycheck-mode)
        (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
