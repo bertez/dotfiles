@@ -115,7 +115,6 @@
 
      ;; Remove spaces and tabs on save
      (add-hook 'before-save-hook 'delete-trailing-whitespace)
-     (add-hook 'before-save-hook 'untabify)
 
      ;; Better defaults
      (setq save-interprogram-paste-before-kill t
