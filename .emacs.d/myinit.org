@@ -13,7 +13,7 @@
      ;; remove splash screen and set default mode
      (setq inhibit-splash-screen t
            initial-scratch-message nil
-     )
+           )
 
      ;; UTF-8
      (setq locale-coding-system 'utf-8)
@@ -22,7 +22,7 @@
      (set-selection-coding-system 'utf-8)
      (prefer-coding-system 'utf-8)
      (when (display-graphic-p)
-        (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
+       (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
 
      ;; Cursor
      (setq-default cursor-type 'box)
@@ -146,10 +146,22 @@
      (setq large-file-warning-threshold 10000000)
 
 #+END_SRC
+** Custom functions
+   #+BEGIN_SRC emacs-lisp
+     (defun comment-or-uncomment-line-or-region ()
+       "Comments or uncomments the current line or region."
+       (interactive)
+       (if (region-active-p)
+           (comment-or-uncomment-region (region-beginning) (region-end))
+         (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+         )
+       )
+
+   #+END_SRC
 ** Keybindings
    #+BEGIN_SRC emacs-lisp
 
-     (global-set-key (kbd "C-:") 'comment-or-uncomment-region)
+     (global-set-key (kbd "C-:") 'comment-or-uncomment-line-or-region)
      (global-set-key (kbd "RET") 'newline-and-indent)
      (global-unset-key "\C-z")
      (global-unset-key "\C-x\C-z")
@@ -653,12 +665,16 @@
        :ensure t
        :defer t
        :init
-       (defhydra hydra-zoom ()
-         "zoom"
-         ("g" text-scale-increase)
-         ("l" text-scale-decrease))
-       (global-set-key (kbd "<f2>") 'hydra-zoom/body)
-     )
+       (defhydra hydra-movement ()
+         "quick move"
+         ("h" windmove-left )
+         ("j" windmove-down )
+         ("k" windmove-up )
+         ("l" windmove-right )
+         ("SPC" nil))
+
+       (global-set-key (kbd "C-M-o") 'hydra-movement/body)
+      )
 
      (use-package org
        :ensure t
