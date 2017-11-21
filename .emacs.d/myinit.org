@@ -148,6 +148,8 @@
              ispell-dictionary "gl_ES")
        )
 
+     ;; View
+     (require 'view)
 #+END_SRC
 ** Custom functions
    #+BEGIN_SRC emacs-lisp
