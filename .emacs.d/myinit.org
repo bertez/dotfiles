@@ -667,10 +667,10 @@
        :init
        (defhydra hydra-movement ()
          "quick move"
-         ("h" windmove-left )
-         ("j" windmove-down )
-         ("k" windmove-up )
-         ("l" windmove-right )
+         ("<left>" windmove-left )
+         ("<down>" windmove-down )
+         ("<up>" windmove-up )
+         ("<right>" windmove-right )
          ("SPC" nil))
 
        (global-set-key (kbd "C-M-o") 'hydra-movement/body)
