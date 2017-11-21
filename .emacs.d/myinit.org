@@ -584,7 +584,7 @@
        (define-key js2-mode-map (kbd "C-c j") 'prettier-js)
        )
 
-     (Use-package yasnippet
+     (use-package yasnippet
        :ensure t
        :diminish yas-minor-mode
        :init (yas-global-mode 1))
