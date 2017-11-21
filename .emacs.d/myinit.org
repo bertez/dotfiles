@@ -398,7 +398,7 @@
         web-mode-enable-current-element-highlight t
         web-mode-enable-auto-opening t
         web-mode-enable-auto-pairing nil
-        web-mode-enable-auto-quoting nilf
+        web-mode-enable-auto-quoting nil
         web-mode-enable-auto-indentation t)
        :config
        (add-hook 'web-mode-hook 'emmet-mode)
