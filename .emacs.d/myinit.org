@@ -54,10 +54,6 @@
 
      ;; scroll to top and bottom more naturally
      (setq scroll-error-top-bottom t)
-     (require 'view)
-     (setq scroll-step            1
-           scroll-conservatively  10000)
-
 
      ;; show empty lines at the end
      (setq-default indicate-empty-lines t)
@@ -220,6 +216,14 @@
 
      (use-package dash
        :ensure t)
+
+     (use-package smooth-scrolling
+       :ensure t
+       :init
+       (setq smooth-scroll-margin 5)
+       :config
+       (smooth-scrolling-mode 1)
+       )
 
      (use-package dired
        :init
@@ -394,7 +398,7 @@
         web-mode-enable-current-element-highlight t
         web-mode-enable-auto-opening t
         web-mode-enable-auto-pairing nil
-        web-mode-enable-auto-quoting nil
+        web-mode-enable-auto-quoting nilf
         web-mode-enable-auto-indentation t)
        :config
        (add-hook 'web-mode-hook 'emmet-mode)
@@ -439,10 +443,6 @@
        :ensure t
        :defer 2
        :bind (("C-x g" . magit-status)))
-
-     (use-package avy
-       :ensure t
-       :bind (("C-_" . avy-goto-char-timer)))
 
      (use-package ivy
        :ensure t
@@ -728,7 +728,7 @@
 
        (setq org-directory "~/Dropbox/Org")
        (setq org-agenda-files '("~/Dropbox/Org"))
-       (setq org-default-notes-file (concat org-directory "~/Dropbox/Org/Notes.org"))
+       (setq org-default-notes-file (concat org-directory "Notes.org"))
        )
 
      (use-package org-bullets
