@@ -148,6 +148,10 @@
              ispell-dictionary "gl_ES")
        )
 
+     (require 'printing)
+     (pr-update-menus t)
+     (setenv "CUPS_SERVER" "localhost")
+
      ;; View
      (require 'view)
 #+END_SRC
@@ -217,6 +221,9 @@
      ;;
 
      (use-package dash
+       :ensure t)
+
+     (use-package cups
        :ensure t)
 
      (use-package smooth-scrolling
@@ -696,7 +703,6 @@
 
      (use-package org
        :ensure t
-       :defer t
        :mode ("\\.org\\'" . org-mode)
        :bind (("C-c l" . org-store-link)
               ("C-c c" . org-capture)
@@ -730,20 +736,14 @@
 
        (setq org-directory "~/Dropbox/Org")
        (setq org-agenda-files '("~/Dropbox/Org"))
-       (setq org-default-notes-file (concat org-directory "Notes.org"))
+       (setq org-default-notes-file (concat org-directory "/Notes.org"))
+       (setq org-archive-location "~/Dropbox/Org/archive.org::* From %s")
        )
 
      (use-package org-bullets
        :ensure t
        :commands (org-bullets-mode)
        :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-     (use-package ox-reveal
-       :ensure ox-reveal
-       :init
-       (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-       (setq org-reveal-mathjax t)
-       )
 
 
      (put 'upcase-region 'disabled nil)
