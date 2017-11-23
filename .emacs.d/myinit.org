@@ -573,6 +573,7 @@
        :init
        (add-hook 'js2-mode-hook (lambda ()
                                   (tern-mode)
+                                  (emmet-mode)
                                   (syntax-subword-mode)
                                   (push '(company-tern :with company-yasnippet) company-backends)
                                   (js2-imenu-extras-mode 1)))
