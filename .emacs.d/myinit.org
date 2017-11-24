@@ -148,10 +148,6 @@
              ispell-dictionary "gl_ES")
        )
 
-     (require 'printing)
-     (pr-update-menus t)
-     (setenv "CUPS_SERVER" "localhost")
-
      ;; View
      (require 'view)
 #+END_SRC
@@ -221,9 +217,6 @@
      ;;
 
      (use-package dash
-       :ensure t)
-
-     (use-package cups
        :ensure t)
 
      (use-package smooth-scrolling
@@ -369,14 +362,13 @@
      (use-package smartparens
        :ensure t
        :diminish smartparens-mode
-       :init
-       (smartparens-global-mode 1)
-       (show-smartparens-global-mode 1)
        :config
-       (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
-       (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
-       (add-hook 'sgml-mode  'smartparens-mode)
-       (add-hook 'web-mode  'smartparens-mode)
+       (progn
+         (require 'smartparens-config)
+         (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
+         (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
+         (add-hook 'prog-mode-hook 'smartparens-mode)
+         )
        :bind
        ("C-M-k" . sp-kill-sexp)
        ("C-M-f" . sp-forward-sexp)
@@ -388,12 +380,7 @@
        ("C-M-w" . sp-copy-sexp)
        )
 
-     (use-package rainbow-delimiters
-       :ensure t
-       :init
-       (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-     (use-package web-mode
+       (use-package web-mode
        :ensure t
        :mode ("\\.html\\'"
               "\\.css\\'"
@@ -603,7 +590,6 @@
        :ensure t
        :diminish company-mode
        :config
-       (global-company-mode 1)
        (setq
         company-echo-delay 0
         company-idle-delay 0.2
@@ -627,6 +613,8 @@
                    '(:with company-yasnippet))))
 
        (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+       (add-hook 'prog-mode-hook  'company-mode)
+
        )
 
      (use-package company-tern
@@ -751,5 +739,4 @@
      (put 'dired-find-alternate-file 'disabled nil)
 
      ;;; init.el ends here
-
    #+END_SRC
