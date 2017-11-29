@@ -430,7 +430,8 @@
        :ensure t
        :diminish drag-stuff-mode
        :config
-       (setq drag-stuff-modifier '(meta shift))
+       (setq drag-stuff-modifier '(meta super))
+       (add-to-list 'drag-stuff-except-modes 'org-mode)
        (drag-stuff-global-mode 1)
        (drag-stuff-define-keys)
        )
