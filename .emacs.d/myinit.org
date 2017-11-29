@@ -362,12 +362,13 @@
      (use-package smartparens
        :ensure t
        :diminish smartparens-mode
+       :init
+       (add-hook 'prog-mode-hook 'smartparens-mode)
        :config
        (progn
          (require 'smartparens-config)
          (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
          (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
-         (add-hook 'prog-mode-hook 'smartparens-mode)
          )
        :bind
        ("C-M-k" . sp-kill-sexp)
