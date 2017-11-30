@@ -1,3 +1,5 @@
+#+STARTUP: content
+
 * Emacs config
 ** General
    #+BEGIN_SRC emacs-lisp
@@ -150,7 +152,11 @@
 
      ;; View
      (require 'view)
-#+END_SRC
+
+     (put 'upcase-region 'disabled nil)
+     (put 'dired-find-alternate-file 'disabled nil)
+
+   #+END_SRC
 ** Custom functions
    #+BEGIN_SRC emacs-lisp
      (defun comment-or-uncomment-line-or-region ()
@@ -211,13 +217,16 @@
 
        #+END_SRC
 ** Packages
-   #+BEGIN_SRC emacs-lisp
-     ;;
-     ;; PACKAGES
-     ;;
+*** Dash
 
+   #+BEGIN_SRC emacs-lisp
      (use-package dash
        :ensure t)
+
+   #+END_SRC
+*** Smooth scrolling
+
+   #+BEGIN_SRC emacs-lisp
 
      (use-package smooth-scrolling
        :ensure t
@@ -226,6 +235,11 @@
        :config
        (smooth-scrolling-mode 1)
        )
+
+   #+END_SRC
+*** Dired
+
+   #+BEGIN_SRC emacs-lisp
 
      (use-package dired
        :init
@@ -242,9 +256,17 @@
              (mapc 'find-file fn-list))))
        )
 
+   #+END_SRC
+*** Winner mode
+
+   #+BEGIN_SRC emacs-lisp
      (when (fboundp 'winner-mode)
        (winner-mode 1))
 
+   #+END_SRC
+*** Flycheck
+
+   #+BEGIN_SRC emacs-lisp
      (use-package flycheck
        :ensure t
        :diminish flycheck-mode
@@ -254,6 +276,12 @@
        (add-hook 'prog-mode-hook 'global-flycheck-mode)
        (setq-default flycheck-disabled-checkers '(javascript-jshint json-jsonlist))
        )
+
+   #+END_SRC
+*** hl-line
+
+   #+BEGIN_SRC emacs-lisp
+
 
      (use-package hl-line
        :config
@@ -271,7 +299,11 @@
        )
 
 
-     ;; Project management.
+   #+END_SRC
+*** Projectile
+
+   #+BEGIN_SRC emacs-lisp
+
      (use-package projectile
        :ensure t
        :commands (projectile-find-file projectile-switch-project)
@@ -283,6 +315,11 @@
        )
 
 
+   #+END_SRC
+*** Multiple cursors
+
+   #+BEGIN_SRC emacs-lisp
+
      (use-package multiple-cursors
        :ensure t
        :config
@@ -291,6 +328,10 @@
        (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
        )
 
+   #+END_SRC
+*** Emmet mode
+
+   #+BEGIN_SRC emacs-lisp
      (use-package emmet-mode
        :ensure t
        :init
@@ -298,6 +339,12 @@
        (setq emmet-expand-jsx-className? t)
        (setq emmet-move-cursor-between-quotes t)
        )
+
+   #+END_SRC
+*** Markdown mode
+
+   #+BEGIN_SRC emacs-lisp
+
 
      (use-package markdown-mode
        :ensure t
@@ -308,14 +355,28 @@
        :init (setq markdown-command "multimarkdown")
        )
 
+   #+END_SRC
+*** Rainbow delimiters
+   #+BEGIN_SRC emacs-lisp
+
+
      (use-package rainbow-delimiters
        :ensure t
        :init
        (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+   #+END_SRC
+*** Htmlize
+   #+BEGIN_SRC emacs-lisp
+
+
      (use-package htmlize
        :ensure t)
 
+   #+END_SRC
+*** Prettier JS
+
+   #+BEGIN_SRC emacs-lisp
      (use-package prettier-js
        :ensure t
        :config
@@ -327,10 +388,21 @@
        (add-hook 'js2-mode-hook 'prettier-js-mode)
        )
 
+   #+END_SRC
+*** Expand region
+
+   #+BEGIN_SRC emacs-lisp
+
+
      (use-package expand-region
        :ensure t
        :bind (("C-=" . er/expand-region))
        )
+
+   #+END_SRC
+*** Recentf
+   #+BEGIN_SRC emacs-lisp
+
 
      (use-package recentf
        :ensure t
@@ -340,6 +412,9 @@
        (recentf-mode 1)
        )
 
+   #+END_SRC
+*** Ace windows
+   #+BEGIN_SRC emacs-lisp
      (use-package ace-window
        :ensure t
        :bind
@@ -352,23 +427,37 @@
        (setq aw-background t)
        )
 
+   #+END_SRC
+*** Iedit
+
+   #+BEGIN_SRC emacs-lisp
+
      (use-package iedit
        :ensure t)
+
+
+   #+END_SRC
+*** SCSS mode
+   #+BEGIN_SRC emacs-lisp
 
      (use-package scss-mode
        :ensure t
        :mode "\\.scss\\'"
        )
 
+   #+END_SRC
+*** Smartparens
+   #+BEGIN_SRC emacs-lisp
      (use-package smartparens
        :ensure t
        :diminish smartparens-mode
+       :init
+       (add-hook 'prog-mode-hook 'smartparens-mode)
        :config
        (progn
          (require 'smartparens-config)
          (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
          (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
-         (add-hook 'prog-mode-hook 'smartparens-mode)
          )
        :bind
        ("C-M-k" . sp-kill-sexp)
@@ -380,6 +469,11 @@
        ("C-M-p" . sp-backward-down-sexp)
        ("C-M-w" . sp-copy-sexp)
        )
+
+   #+END_SRC
+*** Web mode
+   #+BEGIN_SRC emacs-lisp
+
 
        (use-package web-mode
        :ensure t
@@ -401,15 +495,24 @@
        (add-hook 'web-mode-hook 'emmet-mode)
        )
 
+   #+END_SRC
+*** YAML mode
+   #+BEGIN_SRC emacs-lisp
      (use-package yaml-mode
        :ensure t
        :mode ("\\.yml$" . yaml-mode))
 
-
+   #+END_SRC
+*** Tomorrow night theme
+   #+BEGIN_SRC emacs-lisp
      (use-package color-theme-sanityinc-tomorrow
        :ensure t
        :config (load-theme 'sanityinc-tomorrow-night t)
        )
+
+   #+END_SRC
+*** Spaceline config
+   #+BEGIN_SRC emacs-lisp
 
      (use-package spaceline-config
        :ensure spaceline
@@ -419,6 +522,9 @@
        :config
        (spaceline-emacs-theme))
 
+   #+END_SRC
+*** Which key
+   #+BEGIN_SRC emacs-lisp
 
      (use-package which-key
        :ensure t
@@ -427,6 +533,9 @@
        (which-key-mode)
        )
 
+   #+END_SRC
+*** Drag stuff
+   #+BEGIN_SRC emacs-lisp
      (use-package drag-stuff
        :ensure t
        :diminish drag-stuff-mode
@@ -437,11 +546,16 @@
        (drag-stuff-define-keys)
        )
 
+   #+END_SRC
+*** Magit
+   #+BEGIN_SRC emacs-lisp
      (use-package magit
        :ensure t
        :defer 2
        :bind (("C-x g" . magit-status)))
-
+   #+END_SRC
+*** Ivy
+   #+BEGIN_SRC emacs-lisp
      (use-package ivy
        :ensure t
        :diminish ivy-mode
@@ -473,6 +587,10 @@
      (use-package swiper
        :ensure t)
 
+   #+END_SRC
+*** Counsel projectile
+   #+BEGIN_SRC emacs-lisp
+
      (use-package counsel-projectile
        :ensure t
        :init
@@ -482,11 +600,19 @@
        ("M-P" . counsel-projectile-switch-project)
        )
 
+
+   #+END_SRC
+*** Smex
+   #+BEGIN_SRC emacs-lisp
+
      (use-package smex
        :ensure t
        :init
        (smex-initialize))
 
+   #+END_SRC
+*** Exec path from shell
+   #+BEGIN_SRC emacs-lisp
      (use-package exec-path-from-shell
        :ensure t
        :init
@@ -495,6 +621,9 @@
          )
        )
 
+   #+END_SRC
+*** ERC
+   #+BEGIN_SRC emacs-lisp
      (use-package erc
        :init
        (use-package erc-truncate
@@ -533,11 +662,21 @@
                  'erc-truncate-buffer)
        )
 
+   #+END_SRC
+*** JSON mode
+   #+BEGIN_SRC emacs-lisp
+
+
      (use-package json-mode
        :ensure t
        :mode (("\\.json\\'" . json-mode)
               ("\\.eslintrc\\'" . json-mode))
        :config (setq-default js-indent-level 2))
+
+   #+END_SRC
+*** Git gutter
+   #+BEGIN_SRC emacs-lisp
+
 
      (use-package git-gutter
        :ensure t
@@ -546,6 +685,9 @@
        (global-git-gutter-mode t)
        )
 
+   #+END_SRC
+*** Syntax subword
+   #+BEGIN_SRC emacs-lisp
      (use-package syntax-subword
        :ensure t
        :diminish subword-mode
@@ -553,6 +695,9 @@
        (setq syntax-subword-skip-spaces t)
        )
 
+   #+END_SRC
+*** Tern
+   #+BEGIN_SRC emacs-lisp
      (use-package tern
        :ensure t
        :defer t
@@ -560,6 +705,9 @@
        (setq tern-command (append tern-command '("--no-port-file")))
        (add-hook 'js2-mode-hook 'tern-mode)
        )
+   #+END_SRC
+*** JS2 mode
+   #+BEGIN_SRC emacs-lisp
 
 
      (use-package js2-mode
@@ -583,11 +731,19 @@
        (define-key js2-mode-map (kbd "C-c j") 'prettier-js)
        )
 
+   #+END_SRC
+*** Yasnippet
+   #+BEGIN_SRC emacs-lisp
+
+
      (use-package yasnippet
        :ensure t
        :diminish yas-minor-mode
        :init (yas-global-mode 1))
 
+   #+END_SRC
+*** Company
+   #+BEGIN_SRC emacs-lisp
      (use-package company
        :ensure t
        :diminish company-mode
@@ -619,6 +775,9 @@
 
        )
 
+   #+END_SRC
+*** Company tern
+   #+BEGIN_SRC emacs-lisp
      (use-package company-tern
        :ensure t
        :init
@@ -627,6 +786,9 @@
        (setq company-tern-property-marker nil)
        )
 
+   #+END_SRC
+*** Undo tree
+   #+BEGIN_SRC emacs-lisp
      (use-package undo-tree
        :ensure t
        :diminish undo-tree-mode
@@ -636,8 +798,9 @@
        :config
        (global-undo-tree-mode t)
        )
-
-
+   #+END_SRC
+*** Elfeed
+   #+BEGIN_SRC emacs-lisp
      ;;http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
      ;;makes sure elfeed reads index from disk before launching
      (defun my/elfeed-load-db-and-open ()
@@ -677,6 +840,9 @@
        (elfeed-org)
        )
 
+   #+END_SRC
+*** Hydra
+   #+BEGIN_SRC emacs-lisp
      (use-package hydra
        :ensure t
        :defer t
@@ -691,6 +857,9 @@
 
        (global-set-key (kbd "C-M-o") 'hydra-movement/body)
       )
+   #+END_SRC
+*** Org
+   #+BEGIN_SRC emacs-lisp
 
      (use-package org
        :ensure t
@@ -735,10 +904,5 @@
        :ensure t
        :commands (org-bullets-mode)
        :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-
-     (put 'upcase-region 'disabled nil)
-     (put 'dired-find-alternate-file 'disabled nil)
-
      ;;; init.el ends here
    #+END_SRC
