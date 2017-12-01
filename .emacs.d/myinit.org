@@ -54,8 +54,12 @@
      ;; show directories first in dired
      (setq dired-listing-switches "-aBhl")
 
-     ;; scroll to top and bottom more naturally
-     (setq scroll-error-top-bottom t)
+     ;; scroll stuff
+     (setq scroll-error-top-bottom t
+           scroll-margin 0
+           scroll-conservatively 100000
+           scroll-preserve-screen-position 1
+           )
 
      ;; show empty lines at the end
      (setq-default indicate-empty-lines t)
