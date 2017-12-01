@@ -217,6 +217,11 @@
 
        #+END_SRC
 ** Packages
+*** Diminish
+    #+BEGIN_SRC emacs-lisp
+    (use-package diminish
+    :ensure t)
+    #+END_SRC
 *** Dash
 
    #+BEGIN_SRC emacs-lisp

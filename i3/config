@@ -157,7 +157,7 @@ focus_follows_mouse no
 
 exec_always --no-startup-id "killall -q compton; compton --config ~/.config/compton.conf"
 
-exec --no-startup-id xrandr --output VIRTUAL1 --off --output DP2 --off --output DP1 --off --output HDMI2 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --mode 1920x1080 --pos 0x0 --rotate normal --output VGA1 --off
+exec --no-startup-id sh ~/.screenlayout/layout.sh
 
 exec --no-startup-id feh --bg-fill ~/Stuff/bg.jpg
 
