@@ -6,6 +6,9 @@
      (setq user-full-name "Berto Yáñez"
            user-mail-address "berto@ber.to")
 
+           (add-to-list 'default-frame-alist '(height . 55))
+           (add-to-list 'default-frame-alist '(width . 140))
+
      ;; save the position of the cursor
      (save-place-mode 1)
 
@@ -195,7 +198,6 @@
    #+END_SRC
 ** Keybindings
    #+BEGIN_SRC emacs-lisp
-
      (global-set-key (kbd "C-:") 'comment-or-uncomment-line-or-region)
      (global-set-key (kbd "C-c d") 'duplicate-current-line-or-region)
      (global-set-key (kbd "RET") 'newline-and-indent)
@@ -227,14 +229,12 @@
     :ensure t)
     #+END_SRC
 *** Dash
-
    #+BEGIN_SRC emacs-lisp
      (use-package dash
        :ensure t)
 
    #+END_SRC
 *** Smooth scrolling
-
    #+BEGIN_SRC emacs-lisp
 
      (use-package smooth-scrolling
@@ -247,9 +247,7 @@
 
    #+END_SRC
 *** Dired
-
    #+BEGIN_SRC emacs-lisp
-
      (use-package dired
        :init
        (setq dired-dwim-target t)
@@ -294,17 +292,11 @@
 
      (use-package hl-line
        :config
+       (progn
        ;; Highlight the line only in the active window
        (setq hl-line-sticky-flag nil)
-
-       (use-package hl-line+
-         :ensure t
-         :config
-         (toggle-hl-line-when-idle 1) ; Highlight line only when idle
-         ;; Number of seconds of idle time after when the line should be highlighted
-         (setq hl-line-idle-interval 3)
-         ;; Number of seconds for `hl-line-flash' to highlight the line
-         (setq hl-line-flash-show-period 3))
+       (hl-line-mode)
+       )
        )
 
 
@@ -367,8 +359,6 @@
    #+END_SRC
 *** Rainbow delimiters
    #+BEGIN_SRC emacs-lisp
-
-
      (use-package rainbow-delimiters
        :ensure t
        :init
@@ -395,6 +385,7 @@
                                 "--jsx-bracket-same-line"
                                 ))
        (add-hook 'js2-mode-hook 'prettier-js-mode)
+       (add-hook 'rjsx-mode-hook 'prettier-js-mode)
        )
 
    #+END_SRC
@@ -438,13 +429,9 @@
 
    #+END_SRC
 *** Iedit
-
    #+BEGIN_SRC emacs-lisp
-
      (use-package iedit
        :ensure t)
-
-
    #+END_SRC
 *** SCSS mode
    #+BEGIN_SRC emacs-lisp
@@ -466,7 +453,9 @@
        (progn
          (require 'smartparens-config)
          (sp-local-pair 'js2-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
+         (sp-local-pair 'rjsx-mode "{" nil :post-handlers '(:add ("||\n[i]" "RET")))
          (sp-local-pair 'js2-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
+         (sp-local-pair 'rjsx-mode "[" nil :post-handlers '(:add ("||\n[i]" "RET")))
          )
        :bind
        ("C-M-k" . sp-kill-sexp)
@@ -482,8 +471,6 @@
    #+END_SRC
 *** Web mode
    #+BEGIN_SRC emacs-lisp
-
-
        (use-package web-mode
        :ensure t
        :mode ("\\.html\\'"
@@ -602,8 +589,8 @@
 
      (use-package counsel-projectile
        :ensure t
-       :init
-       (counsel-projectile-on)
+       :config
+       ;;(counsel-projectile-on)
        :bind
        ("M-p" . counsel-projectile-find-file)
        ("M-P" . counsel-projectile-switch-project)
@@ -639,8 +626,6 @@
          :config (add-to-list 'erc-modules 'truncate))
        (use-package erc-autoaway
          :config (add-to-list 'erc-modules 'autoaway))
-       (use-package erc-notifications
-         :config (add-to-list 'erc-modules 'notifications))
        (use-package erc-track
          :config (erc-track-mode 1))
        :config
@@ -707,13 +692,14 @@
    #+END_SRC
 *** Tern
    #+BEGIN_SRC emacs-lisp
-     (use-package tern
-       :ensure t
-       :defer t
-       :config
-       (setq tern-command (append tern-command '("--no-port-file")))
-       (add-hook 'js2-mode-hook 'tern-mode)
-       )
+(use-package tern
+  :ensure t
+  :defer t
+  :config
+  (setq tern-command (append tern-command '("--no-port-file")))
+  (add-hook 'js2-mode-hook 'tern-mode)
+  (add-hook 'rjsx-mode-hook 'tern-mode)
+  )
    #+END_SRC
 *** JS2 mode
    #+BEGIN_SRC emacs-lisp
@@ -722,7 +708,6 @@
      (use-package js2-mode
        :ensure t
        :mode (
-              ("\\.jsx?\\'" . js2-jsx-mode)
               ("\\.es6\\'" . js2-jsx-mode)
               )
        :init
@@ -741,6 +726,30 @@
        )
 
    #+END_SRC
+*** RJSX
+    #+BEGIN_SRC emacs-lisp
+
+    (use-package rjsx-mode
+    :after js2-mode
+      :ensure t
+      :mode "\\.jsx$")
+
+    #+END_SRC
+*** Dumb jump
+#+BEGIN_SRC emacs-lisp
+  (use-package dumb-jump
+    ;; :bind (("M-g o" . dumb-jump-go-other-window)
+    ;;        ("M-g j" . dumb-jump-go)
+    ;;        ("M-g i" . dumb-jump-go-prompt)
+    ;;        ("M-g x" . dumb-jump-go-prefer-external)
+    ;;        ("M-g z" . dumb-jump-go-prefer-external-other-window))
+    :config
+    (progn
+    (setq dumb-jump-selector 'ivy)
+    (dumb-jump-mode)
+    ) ;; (setq dumb-jump-selector 'helm)
+    :ensure t)
+#+END_SRC
 *** Yasnippet
    #+BEGIN_SRC emacs-lisp
 
@@ -807,48 +816,6 @@
        :config
        (global-undo-tree-mode t)
        )
-   #+END_SRC
-*** Elfeed
-   #+BEGIN_SRC emacs-lisp
-     ;;http://pragmaticemacs.com/emacs/read-your-rss-feeds-in-emacs-with-elfeed/
-     ;;makes sure elfeed reads index from disk before launching
-     (defun my/elfeed-load-db-and-open ()
-       "Wrapper to load the elfeed db from disk before opening."
-       (interactive)
-       (elfeed-db-load)
-       (elfeed)
-       (elfeed-search-update--force))
-
-     ;;write to disk when quiting
-     (defun my/elfeed-save-db-and-bury ()
-       "Wrapper to save the elfeed db to disk before burying buffer."
-       (interactive)
-       (elfeed-db-save)
-       (quit-window))
-
-     (use-package elfeed
-       :ensure t
-       :init
-       (setq elfeed-db-directory "~/Dropbox/shared/elfeeddb")
-       (setq-default elfeed-search-filter "@1-week-ago +unread ")
-       :config
-       (defun elfeed-search-format-date (date)
-         (format-time-string "%d/%m/%Y %H:%M" (seconds-to-time date)))
-       :bind
-       ("C-x w" . my/elfeed-load-db-and-open)
-       (:map elfeed-search-mode-map
-                   ("q" . my/elfeed-save-db-and-bury)
-                   ("Q" . my/elfeed-save-db-and-bury))
-       )
-
-     (use-package elfeed-org
-       :ensure t
-       :init
-       (setq rmh-elfeed-org-files (list "~/Dropbox/Org/feeds/feeds.org"))
-       :config
-       (elfeed-org)
-       )
-
    #+END_SRC
 *** Hydra
    #+BEGIN_SRC emacs-lisp
