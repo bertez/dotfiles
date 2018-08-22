@@ -7,7 +7,7 @@
       "modules": true
     }
   },
-  "plugins": ["react"],
+  "plugins": ["react", "security"],
   "rules": {
     "react/prop-types": 0,
     "quotes": [1, "single"],
@@ -32,6 +32,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "prettier",
-    "prettier/react"
+    "prettier/react",
+    "plugin:security/recommended"
   ]
 }
